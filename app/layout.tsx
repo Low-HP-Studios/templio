@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Style_Script } from "next/font/google";
 import "./globals.css";
+import { APP_DESCRIPTION, APP_TITLE } from "@/constants";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
 
 const interTight = Inter_Tight({
@@ -15,9 +16,8 @@ const styleScript = Style_Script({
 });
 
 export const metadata: Metadata = {
-  title: "Templio - Personal Site Builder",
-  description:
-    "A fully customizable personal site builder - no templates, just your taste",
+  title: APP_TITLE,
+  description: APP_DESCRIPTION,
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },

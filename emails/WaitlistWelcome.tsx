@@ -17,7 +17,7 @@ export default function WaitlistWelcome({ email }: WaitlistWelcomeProps) {
   return (
     <Html>
       <Head />
-      <Preview>Welcome to the Templio waitlist!</Preview>
+      <Preview>Your Templio beta invite request is in.</Preview>
       <Body style={main}>
         <Container style={container}>
           <Img
@@ -27,28 +27,31 @@ export default function WaitlistWelcome({ email }: WaitlistWelcomeProps) {
             height="120"
             style={logo}
           />
-          <Heading style={h1}>Welcome to Templio! ✨</Heading>
+          <Heading style={h1}>Templio beta request received</Heading>
           <Text style={text}>
-            Thank you for joining our waitlist! We&apos;re excited to have you
-            on board.
+            Thanks for requesting access to Templio. Your email has been added
+            to our invite-only beta list.
           </Text>
           <Text style={text}>
-            Templio is a fully customizable personal site builder with no
-            templates, just your taste. We&apos;re working hard to bring you
-            something special.
+            Templio is an invite-only beta website builder for custom
+            portfolios, studio sites, and community hubs. No templates, just
+            your taste.
           </Text>
           <Text style={text}>
-            You&apos;ve been successfully added to the waitlist with the email:{" "}
+            We&apos;re opening access in small batches. We&apos;ll reach out as
+            new spots open for the email below:
+            <br />
+            <br />
             <strong>{email}</strong>
           </Text>
           <Text style={text}>
-            We&apos;ll notify you as soon as we launch. Stay tuned for updates!
+            Thanks for the patience. Software always says it will be soon and
+            then argues with reality for a while.
           </Text>
           <Text style={footer}>
-            Best regards,
+            Best,
             <br />
-            The only <a href="https://www.ayush.im">Ayush Rameja</a> from
-            Templio
+            <a href="https://www.ayush.im">Ayush Rameja</a> at Templio
           </Text>
         </Container>
       </Body>

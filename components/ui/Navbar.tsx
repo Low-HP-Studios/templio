@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Container, SeparatedLinks, NavLink } from "@/components/ui";
+import { Container, NavLink } from "@/components/ui";
 
 export function Navbar() {
   return (
@@ -20,17 +20,12 @@ export function Navbar() {
             />
           </Link>
           <span className="rounded-md bg-white/10 px-2 py-1 text-[10px] font-medium sm:text-xs">
-            <span className="font-bold">α</span> Alpha
+            Beta
           </span>
         </div>
-        <SeparatedLinks
-          responsive
-          className="text-sm sm:text-base md:text-base"
-        >
-          <NavLink href="/plan">Plan</NavLink>
-          <NavLink href="/releases">Releases</NavLink>
+        <div className="text-sm sm:text-base md:text-base">
           <NavLink href="/contact">Contact</NavLink>
-        </SeparatedLinks>
+        </div>
       </Container>
     </nav>
   );

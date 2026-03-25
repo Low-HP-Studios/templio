@@ -53,7 +53,7 @@ export const sendWelcomeEmail = action({
       const { data, error } = await resend.emails.send({
         from: "Templio <hello@templio.app>",
         to: args.email,
-        subject: "Welcome to the Templio Waitlist! ✨",
+        subject: "Templio beta invite request received",
         html: emailHtml,
       });
 
