@@ -3,6 +3,7 @@ import {
   Container,
   Head,
   Heading,
+  Hr,
   Html,
   Img,
   Preview,
@@ -11,47 +12,63 @@ import {
 
 interface WaitlistWelcomeProps {
   email: string;
+  idea?: string;
 }
 
-export default function WaitlistWelcome({ email }: WaitlistWelcomeProps) {
+export default function WaitlistWelcome({ email, idea }: WaitlistWelcomeProps) {
   return (
     <Html>
       <Head />
-      <Preview>Your Templio beta invite request is in.</Preview>
+      <Preview>Got your Templio pitch.</Preview>
       <Body style={main}>
         <Container style={container}>
           <Img
             src="https://templio.app/logo.svg"
             alt="Templio Logo"
-            width="120"
-            height="120"
+            width="80"
+            height="80"
             style={logo}
           />
-          <Heading style={h1}>Templio beta request received</Heading>
+          <Heading style={h1}>Thanks for the pitch.</Heading>
           <Text style={text}>
-            Thanks for requesting access to Templio. Your email has been added
-            to our invite-only beta list.
+            I got your idea. I&apos;ll read it properly and reach out from this
+            same address.
           </Text>
+
+          {idea && (
+            <>
+              <Text style={label}>Your pitch</Text>
+              <Container style={quote}>
+                <Text style={quoteText}>{idea}</Text>
+              </Container>
+            </>
+          )}
+
           <Text style={text}>
-            Templio is an invite-only beta website builder for custom
-            portfolios, studio sites, and community hubs. No templates, just
-            your taste.
+            Templio is a passion project - custom websites for people who still
+            care how the web feels. No templates, no invoices, no sales calls.
+            Just sites I&apos;d want to exist.
           </Text>
+
           <Text style={text}>
-            We&apos;re opening access in small batches. We&apos;ll reach out as
-            new spots open for the email below:
-            <br />
-            <br />
-            <strong>{email}</strong>
+            I take on a few of these at a time, so it might take a minute to
+            hear back. I read every pitch.
           </Text>
-          <Text style={text}>
-            Thanks for the patience. Software always says it will be soon and
-            then argues with reality for a while.
+
+          <Hr style={divider} />
+
+          <Text style={fineprint}>
+            Sent to <strong>{email}</strong>. If this wasn&apos;t you, just
+            ignore it.
           </Text>
+
           <Text style={footer}>
-            Best,
+            Take care,
             <br />
-            <a href="https://www.ayush.im">Ayush Rameja</a> at Templio
+            <a href="https://www.ayush.im" style={link}>
+              Ayush
+            </a>{" "}
+            at Templio
           </Text>
         </Container>
       </Body>
@@ -79,9 +96,10 @@ const logo = {
 
 const h1 = {
   color: "#000000",
-  fontSize: "32px",
-  fontWeight: "bold",
-  margin: "40px 0",
+  fontSize: "28px",
+  fontWeight: "600",
+  lineHeight: "1.25",
+  margin: "32px 0 24px",
   padding: "0 40px",
 };
 
@@ -93,10 +111,54 @@ const text = {
   margin: "16px 0",
 };
 
+const label = {
+  color: "#666666",
+  fontSize: "12px",
+  fontWeight: "600",
+  letterSpacing: "0.16em",
+  textTransform: "uppercase" as const,
+  padding: "0 40px",
+  margin: "32px 0 8px",
+};
+
+const quote = {
+  borderLeft: "3px solid #000000",
+  backgroundColor: "#f5f5f5",
+  margin: "0 40px 16px",
+  padding: "16px 20px",
+};
+
+const quoteText = {
+  color: "#111111",
+  fontSize: "15px",
+  lineHeight: "24px",
+  margin: "0",
+  fontStyle: "italic" as const,
+  whiteSpace: "pre-wrap" as const,
+};
+
+const divider = {
+  borderColor: "#eaeaea",
+  margin: "32px 40px",
+};
+
+const fineprint = {
+  color: "#888888",
+  fontSize: "13px",
+  lineHeight: "20px",
+  padding: "0 40px",
+  margin: "16px 0",
+};
+
 const footer = {
   color: "#666666",
   fontSize: "14px",
   lineHeight: "24px",
   padding: "0 40px",
-  margin: "32px 0 0 0",
+  margin: "24px 0 0 0",
+};
+
+const link = {
+  color: "#000000",
+  textDecoration: "underline",
 };

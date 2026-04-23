@@ -18,7 +18,9 @@ export default function ContactPage() {
   >("idle");
 
   const createContact = useMutation(api.contacts.create);
-  const sendNotificationEmail = useAction(api.contacts.sendNotificationEmail);
+  const sendNotificationEmail = useAction(
+    api.contactsEmail.sendNotificationEmail
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,14 +33,14 @@ export default function ContactPage() {
         message: formData.message,
       });
 
-      try {
-        await sendNotificationEmail({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        });
-      } catch (emailError) {
-        console.warn("Failed to send notification email:", emailError);
+      const emailResult = await sendNotificationEmail({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      });
+
+      if (!emailResult.success) {
+        console.info("Notification email skipped:", emailResult.reason);
       }
 
       setStatus("success");
@@ -73,12 +75,12 @@ export default function ContactPage() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <h1 className="mb-4 font-display text-4xl text-white sm:text-5xl md:text-6xl">
+          <h1 className="mb-4 text-4xl leading-tight text-white sm:text-5xl md:text-6xl">
             Contact Templio
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-zinc-400 sm:text-xl">
-            Questions about beta access, showcase launches, or custom website
-            builds? Send us a note and tell us what you&apos;re building.
+            Questions about a pitch, a site that&apos;s live, or just want to
+            say hi? Drop a note.
           </p>
         </motion.div>
 

@@ -18,7 +18,7 @@ export function Footer() {
             Ayush Rameja
           </a>
         </p>
-        <p className="text-white/50">Templio © 2025</p>
+        <p className="text-white/50">Templio © 2026</p>
       </Container>
     </footer>
   );
