@@ -18,7 +18,9 @@ export default function ContactPage() {
   >("idle");
 
   const createContact = useMutation(api.contacts.create);
-  const sendNotificationEmail = useAction(api.contacts.sendNotificationEmail);
+  const sendNotificationEmail = useAction(
+    api.contactsEmail.sendNotificationEmail
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,19 +33,19 @@ export default function ContactPage() {
         message: formData.message,
       });
 
-      try {
-        await sendNotificationEmail({
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        });
-      } catch (emailError) {
-        console.warn("Failed to send notification email:", emailError);
+      const emailResult = await sendNotificationEmail({
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      });
+
+      if (!emailResult.success) {
+        console.info("Notification email skipped:", emailResult.reason);
       }
 
       setStatus("success");
       setFormData({ name: "", email: "", message: "" });
-      toast.success("Message sent successfully! I'll get back to you soon.");
+      toast.success("Message sent successfully. We'll get back to you soon.");
 
       setTimeout(() => setStatus("idle"), 3000);
     } catch (error) {
@@ -73,11 +75,12 @@ export default function ContactPage() {
           transition={{ duration: 0.6 }}
           className="mb-12 text-center"
         >
-          <h1 className="mb-4 font-display text-4xl text-white sm:text-5xl md:text-6xl">
-            Get in Touch
+          <h1 className="mb-4 text-4xl leading-tight text-white sm:text-5xl md:text-6xl">
+            Contact Templio
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-zinc-400 sm:text-xl">
-            Have questions or feedback? I&apos;d love to hear from you.
+            Questions about a pitch, a site that&apos;s live, or just want to
+            say hi? Drop a note.
           </p>
         </motion.div>
 
@@ -154,7 +157,7 @@ export default function ContactPage() {
                 disabled={status === "loading"}
                 className="w-full rounded-lg bg-white px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {status === "loading" ? "Sending..." : "Send Message"}
+                {status === "loading" ? "Sending..." : "Send Inquiry"}
               </button>
             </div>
           </form>
@@ -165,7 +168,7 @@ export default function ContactPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-8 text-center text-sm text-zinc-500"
           >
-            You can also reach me at{" "}
+            Prefer a direct intro? Reach the founder via{" "}
             <a
               href="https://www.ayush.im"
               target="_blank"

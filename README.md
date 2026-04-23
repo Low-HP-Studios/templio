@@ -1,7 +1,7 @@
 # Templio
 
-A website for anyone's portfolio
+An invite-only beta website builder for custom portfolios, studio sites, and community hubs.
 
 ## Status
 
-Currently one alpha working in progress
+Currently in invite-only beta.

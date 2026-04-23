@@ -1,7 +1,7 @@
 {
-  "name": "Templio - Personal Site Builder",
+  "name": "Templio - Invite-Only Website Builder",
   "short_name": "Templio",
-  "description": "A fully customizable personal site builder - no templates, just your taste",
+  "description": "An invite-only beta website builder for custom portfolios, studio sites, and community hubs. No templates, just your taste.",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

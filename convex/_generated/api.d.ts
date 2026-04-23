@@ -9,7 +9,9 @@
  */
 
 import type * as contacts from "../contacts.js";
+import type * as contactsEmail from "../contactsEmail.js";
 import type * as waitlist from "../waitlist.js";
+import type * as waitlistEmail from "../waitlistEmail.js";
 
 import type {
   ApiFromModules,
@@ -19,7 +21,9 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   contacts: typeof contacts;
+  contactsEmail: typeof contactsEmail;
   waitlist: typeof waitlist;
+  waitlistEmail: typeof waitlistEmail;
 }>;
 
 /**

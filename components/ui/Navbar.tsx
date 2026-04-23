@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Container, SeparatedLinks, NavLink } from "@/components/ui";
+import { Container, NavLink } from "@/components/ui";
 
 export function Navbar() {
   return (
@@ -9,28 +9,21 @@ export function Navbar() {
         size="lg"
         className="flex items-center justify-between py-4 sm:py-5 md:py-6"
       >
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/" className="transition-opacity hover:opacity-80">
-            <Image
-              src="/logo.svg"
-              alt="Templio"
-              width={28}
-              height={28}
-              className="h-7 w-7 sm:h-8 sm:w-8"
-            />
-          </Link>
-          <span className="rounded-md bg-white/10 px-2 py-1 text-[10px] font-medium sm:text-xs">
-            <span className="font-bold">α</span> Alpha
-          </span>
-        </div>
-        <SeparatedLinks
-          responsive
-          className="text-sm sm:text-base md:text-base"
+        <Link
+          href="/"
+          className="flex items-center transition-opacity hover:opacity-80"
         >
-          <NavLink href="/plan">Plan</NavLink>
-          <NavLink href="/releases">Releases</NavLink>
+          <Image
+            src="/logo.svg"
+            alt="Templio"
+            width={28}
+            height={28}
+            className="h-7 w-7 sm:h-8 sm:w-8"
+          />
+        </Link>
+        <div className="text-sm sm:text-base md:text-base">
           <NavLink href="/contact">Contact</NavLink>
-        </SeparatedLinks>
+        </div>
       </Container>
     </nav>
   );
