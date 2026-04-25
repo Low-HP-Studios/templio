@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "title": "Templio – Individuelle Websites, mit Sorgfalt gebaut",
+    "description": "Individuelle Websites für Menschen, denen am Web noch was liegt. Schick uns eine Idee. Wenn sie stimmig ist, bauen wir sie gemeinsam."
+  },
+  "nav": {
+    "home": "Start",
+    "manifesto": "Manifest",
+    "work": "Vorschau",
+    "pitch": "Pitch",
+    "selectLanguage": "Sprache wählen",
+    "selectTheme": "Design wählen",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeSystem": "System",
+    "switchTheme": "Farbschema wechseln"
+  },
+  "localeLabel": {
+    "en": "EN",
+    "hi": "HI",
+    "zh": "中文",
+    "de": "DE",
+    "es": "ES"
+  },
+  "localeName": {
+    "en": "Englisch",
+    "hi": "Hindi",
+    "zh": "Chinesisch (vereinfacht)",
+    "de": "Deutsch",
+    "es": "Spanisch"
+  },
+  "hero": {
+    "eyebrow": "Maßgeschneidertes Web",
+    "h1": "Individuelle Websites, handwerklich gebaut",
+    "sub": "Pitch ein Portfolio, eine Fan-Seite, Studio-Seite oder eine skurrile Ecke des Internets. Wenn es Puls hat, bauen wir darum herum.",
+    "cta": "Eine Seite pitchen",
+    "stripTitle": "Websites mit Templio gebaut",
+    "scrollPrevious": "Vorherige Seiten anzeigen",
+    "scrollNext": "Weitere Seiten anzeigen"
+  },
+  "manifesto": {
+    "kickerLine": "§ 01 — Die Absprache",
+    "kicker": "Die Absprache",
+    "heading": "Die meisten Websites sind dieselbe Vorlage in einer anderen Farbe.",
+    "headingHighlight": "Vorlage",
+    "body1": "Templio ist für die, die das Web noch feiern. Die einen guten Hover bemerken, eine eigenwillige Schrift, ein Layout, das nicht Linear nacheifert.",
+    "body2": "Pitch uns eine Idee. Wenn sie stimmig ist, bauen wir sie – kostenlos, gemeinsam, im Rhythmus, der passt. Keine Rechnungen, kein Sales-Call, keine Templates.",
+    "finePrint": "Ich nehme nur ein paar davon an, es kann also etwas dauern bis etwas von mir kommt. Ich lese jede Anfrage."
+  },
+  "showcase": {
+    "kickerLine": "§ 02 — Genauer hinsehen",
+    "kicker": "Genauer hinsehen",
+    "heading": "Jede hat als Pitch angefangen.",
+    "headingHighlight": "Pitch",
+    "subheading": "Beschreibungen, Kategorien und Live-Links zu den Seiten, die gerade online sind.",
+    "note": "Mehr in Arbeit. Deine könnte hier stehen.",
+    "builtWith": "{n} — Erstellt mit Templio",
+    "visitLive": "Live-Seite besuchen"
+  },
+  "showcaseSites": {
+    "ayush": {
+      "name": "Ayush Rameja",
+      "category": "Gründer",
+      "description": "Eine persönliche Seite mit präzisem Text, gezielter Motion und starker Product-Builder-Identität."
+    },
+    "bikram": {
+      "name": "Bikramdeep Singh",
+      "category": "Portfolio",
+      "description": "Ein datenorientiertes Portfolio mit Editorial-Typo, stimmigem Hintergrund und raffinierter Kontaktoberfläche."
+    },
+    "arnold": {
+      "name": "Arnold Kevin Desouza",
+      "category": "Portfolio",
+      "description": "Eine eindrucksvolle One-Pager-Präsenz mit klarer Identität, prägnanter Schrift und reduziertem Fokus auf den Hero."
+    },
+    "lowhp": {
+      "name": "Low HP Studio",
+      "category": "Studio",
+      "description": "Eine Studio-Landing, ausgelegt auf Produkterzählung, ruhiges Tempo und scharfes Positioning."
+    },
+    "lunaticladz": {
+      "name": "LunaticLadz",
+      "category": "Community",
+      "description": "Eine community-getriebene Seite rund um Streams, Updates und soziale Hooks – mit lauterem visuellen Charakter."
+    }
+  },
+  "pitchSection": {
+    "kicker": "Templio pitchen",
+    "heading": "Schick die Idee. Ich lese wirklich mit.",
+    "bodyBeforeLink": "Sag, was du bauen willst, und hinterlege eine E-Mail. Für ein direktes Intro: den Gründer erreichst du über",
+    "bodyAfterLink": "."
+  },
+  "form": {
+    "ideaPlaceholder": "Was willst du bauen?",
+    "emailPlaceholder": "Deine E-Mail",
+    "nextLabel": "Weiter",
+    "submitLabel": "Pitch absenden",
+    "editIdeaLabel": "Idee bearbeiten",
+    "successMessage": "Alles klar. Ich melde mich. Danke.",
+    "alreadyExistsMessage": "Den Pitch hattest du schon – ich habe nichts vergessen. Versprochen.",
+    "pitchReceivedToast": "Pitch eingegangen.",
+    "invalidEmailToast": "Bitte eine gültige E-Mail-Adresse eingeben.",
+    "errorToast": "Beim Senden ist etwas schiefgelaufen. Bitte erneut versuchen."
+  },
+  "footer": {
+    "by": "Von",
+    "copyright": "Templio © 2026"
+  },
+  "contact": {
+    "title": "Kontakt Templio",
+    "subtitle": "Fragen zu einem Pitch, einer live-Seite – oder einfach Hallo? Schreib uns.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Dein Name",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "dein.name@beispiel.de",
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Deine Nachricht...",
+    "sending": "Wird gesendet...",
+    "submit": "Nachricht senden",
+    "footerNote": "Direkter Draht? Gründer erreichst du über",
+    "successToast": "Nachricht versendet. Wir melden uns.",
+    "errorToast": "Senden fehlgeschlagen. Bitte erneut versuchen."
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "metadata": {
+    "title": "Templio - 定制网站，用心打造",
+    "description": "为仍然在意“网页该是什么感觉”的人而做的定制站。来投递想法—若彼此合拍，就一起做。"
+  },
+  "nav": {
+    "home": "首页",
+    "manifesto": "理念",
+    "work": "预览",
+    "pitch": "投稿",
+    "selectLanguage": "选择语言",
+    "selectTheme": "选择主题",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeSystem": "系统",
+    "switchTheme": "切换主题"
+  },
+  "localeLabel": {
+    "en": "EN",
+    "hi": "HI",
+    "zh": "中文",
+    "de": "DE",
+    "es": "ES"
+  },
+  "localeName": {
+    "en": "英语",
+    "hi": "印地语",
+    "zh": "简体中文",
+    "de": "德语",
+    "es": "西班牙语"
+  },
+  "hero": {
+    "eyebrow": "定制网页",
+    "h1": "有「手作感」的定制网站",
+    "sub": "欢迎投递作品集、粉丝站、工作室页面或互联网里古怪的小角落—只要有“脉搏”，我们都能围绕它建造。",
+    "cta": "来投递想法",
+    "stripTitle": "用 Templio 打造的网站",
+    "scrollPrevious": "查看上一组案例",
+    "scrollNext": "查看更多案例"
+  },
+  "manifesto": {
+    "kickerLine": "§ 01 — 约定",
+    "kicker": "约定",
+    "heading": "大多数网站，不过是换了颜色的同一套模板。",
+    "headingHighlight": "模板",
+    "body1": "Templio 面向仍对网络兴奋的人：会在意悬停、字体怪不怪、版式是否不像某某抄来的。",
+    "body2": "把你的想法丢过来—如果有趣，我们就一起做：免费、同伴般协作、节奏随你。没有账单、没有推销电话、没有现成模板。",
+    "finePrint": "我一次只接几例，所以回复可能稍慢。每一封我都会认真看。"
+  },
+  "showcase": {
+    "kickerLine": "§ 02 — 细看",
+    "kicker": "细看",
+    "heading": "每一个，最初都是一次「投稿」。",
+    "headingHighlight": "投稿",
+    "subheading": "完整介绍、分类，以及已上线站点的直达链接。",
+    "note": "更多在路上—下一个可能是你。",
+    "builtWith": "{n} — 使用 Templio 制作",
+    "visitLive": "访问线上站点"
+  },
+  "showcaseSites": {
+    "ayush": {
+      "name": "Ayush Rameja",
+      "category": "创始者",
+      "description": "个人站点，文字干净、动效有序，呈现清晰的产品人气质。"
+    },
+    "bikram": {
+      "name": "Bikramdeep Singh",
+      "category": "作品集",
+      "description": "数据导向的作品集，编辑式排版、层次氛围、精致的联系区。"
+    },
+    "arnold": {
+      "name": "Arnold Kevin Desouza",
+      "category": "作品集",
+      "description": "利落的单页个人简介，强识别、好字体、以主视觉为先。"
+    },
+    "lowhp": {
+      "name": "Low HP Studio",
+      "category": "工作室",
+      "description": "面向产品叙事的落地页，节奏稳、信息准。"
+    },
+    "lunaticladz": {
+      "name": "LunaticLadz",
+      "category": "社区",
+      "description": "围绕直播、更新和社交的社区站，外放一点的视觉语言。"
+    }
+  },
+  "pitchSection": {
+    "kicker": "给 Templio 投稿",
+    "heading": "把想法发给我。我会认真读。",
+    "bodyBeforeLink": "写下你想做的东西，再留下邮箱。想直接找创始人的话，可访问",
+    "bodyAfterLink": "。"
+  },
+  "form": {
+    "ideaPlaceholder": "你想做什么？",
+    "emailPlaceholder": "你的邮箱",
+    "nextLabel": "下一步",
+    "submitLabel": "发送想法",
+    "editIdeaLabel": "改想法",
+    "successMessage": "收到。我会认真看并再联系。谢谢。",
+    "alreadyExistsMessage": "你已经投过稿了，我没忘。放心。",
+    "pitchReceivedToast": "已收到你的投稿。",
+    "invalidEmailToast": "请输入有效邮箱。",
+    "errorToast": "发送失败，请重试。"
+  },
+  "footer": {
+    "by": "作者",
+    "copyright": "Templio © 2026"
+  },
+  "contact": {
+    "title": "联系 Templio",
+    "subtitle": "对投稿、已上线项目有疑问，或只想打个招呼？写给我们。",
+    "nameLabel": "姓名",
+    "namePlaceholder": "你的姓名",
+    "emailLabel": "邮箱",
+    "emailPlaceholder": "you@example.com",
+    "messageLabel": "消息",
+    "messagePlaceholder": "写点什么...",
+    "sending": "发送中...",
+    "submit": "发送咨询",
+    "footerNote": "想直接找创始人的话见",
+    "successToast": "已发送。我们会尽快回复。",
+    "errorToast": "发送失败，请重试。"
+  }
+}

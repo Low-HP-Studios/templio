@@ -4,6 +4,8 @@ type AccentName = "sky" | "amber" | "rose" | "emerald";
 
 interface ShowcaseMockupProps {
   site: ShowcaseSite;
+  name: string;
+  categoryLabel: string;
   accent?: AccentName;
   className?: string;
 }
@@ -46,13 +48,7 @@ function getInitial(name: string) {
   return name.trim().charAt(0).toUpperCase();
 }
 
-function PortfolioBody({
-  site,
-  accent,
-}: {
-  site: ShowcaseSite;
-  accent: AccentName;
-}) {
+function PortfolioBody({ name, accent }: { name: string; accent: AccentName }) {
   const a = ACCENTS[accent];
   return (
     <div className="relative flex h-full items-center justify-center">
@@ -63,7 +59,7 @@ function PortfolioBody({
         className="relative font-display text-6xl leading-none text-white/90 drop-shadow-[0_4px_18px_rgba(0,0,0,0.6)]"
         aria-hidden
       >
-        {getInitial(site.name)}
+        {getInitial(name)}
       </span>
       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[9px] uppercase tracking-[0.3em] text-zinc-500">
         <span>Est. 2026</span>
@@ -126,25 +122,30 @@ function CommunityBody({ accent }: { accent: AccentName }) {
 
 function MockupBody({
   site,
+  name,
   accent,
 }: {
   site: ShowcaseSite;
+  name: string;
   accent: AccentName;
 }) {
-  switch (site.category) {
-    case "Portfolio":
-      return <PortfolioBody site={site} accent={accent} />;
-    case "Studio":
+  switch (site.template) {
+    case "portfolio":
+    case "founder":
+      return <PortfolioBody name={name} accent={accent} />;
+    case "studio":
       return <StudioBody accent={accent} />;
-    case "Community":
+    case "community":
       return <CommunityBody accent={accent} />;
     default:
-      return <PortfolioBody site={site} accent={accent} />;
+      return <PortfolioBody name={name} accent={accent} />;
   }
 }
 
 export function ShowcaseMockup({
   site,
+  name,
+  categoryLabel,
   accent = "sky",
   className = "",
 }: ShowcaseMockupProps) {
@@ -165,15 +166,13 @@ export function ShowcaseMockup({
       </div>
 
       <div className="relative h-[128px] overflow-hidden bg-gradient-to-b from-zinc-950 to-zinc-900">
-        <MockupBody site={site} accent={accent} />
+        <MockupBody site={site} name={name} accent={accent} />
       </div>
 
       <div className="flex items-center justify-between border-t border-white/5 bg-zinc-950/60 px-3 py-2">
-        <span className="truncate text-xs font-medium text-white">
-          {site.name}
-        </span>
+        <span className="truncate text-xs font-medium text-white">{name}</span>
         <span className="shrink-0 text-[9px] uppercase tracking-[0.24em] text-zinc-500">
-          {site.category}
+          {categoryLabel}
         </span>
       </div>
     </div>

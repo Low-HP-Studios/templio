@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Inter_Tight, Style_Script } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import "./globals.css";
-import { APP_DESCRIPTION, APP_TITLE } from "@/constants";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import { htmlLangForLocale } from "@/i18n/routing";
 
 const interTight = Inter_Tight({
   variable: "--font-inter-tight",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
 const styleScript = Style_Script({
@@ -16,8 +18,6 @@ const styleScript = Style_Script({
 });
 
 export const metadata: Metadata = {
-  title: APP_TITLE,
-  description: APP_DESCRIPTION,
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -45,17 +45,20 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
+    <html lang={htmlLangForLocale(locale)} suppressHydrationWarning>
       <body
         className={`${interTight.variable} ${styleScript.variable} antialiased`}
       >
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );
