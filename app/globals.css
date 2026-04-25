@@ -24,3 +24,15 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter-tight), sans-serif;
 }
+
+@keyframes showcase-full-page-scroll {
+  0%,
+  12% {
+    object-position: top;
+  }
+
+  88%,
+  100% {
+    object-position: bottom;
+  }
+}

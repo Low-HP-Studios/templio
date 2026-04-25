@@ -143,10 +143,10 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
   );
 
   const mainBarInteractive =
-    "cursor-pointer rounded-[5px] text-white transition-[background-color,box-shadow,transform] duration-200 hover:bg-sky-500/10 hover:shadow-[inset_0_0_0_2px_#0696d7] active:translate-y-px active:bg-sky-500/15 active:shadow-[inset_0_0_0_2px_#0696d7] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#0696d7]";
+    "cursor-pointer rounded-[5px] text-white transition-[background-color,box-shadow,transform] duration-200 hover:bg-lime-300/10 hover:shadow-[inset_0_0_0_2px_#bef264] active:translate-y-px active:bg-lime-300/15 active:shadow-[inset_0_0_0_2px_#bef264] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#bef264]";
 
   const subBarInteractive =
-    "cursor-pointer rounded-[5px] text-zinc-900 transition-[background-color,box-shadow,transform] duration-200 hover:bg-sky-500/10 hover:shadow-[inset_0_0_0_2px_#0696d7] active:translate-y-px active:bg-sky-500/15 active:shadow-[inset_0_0_0_2px_#0696d7] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#0696d7] dark:text-white";
+    "cursor-pointer rounded-[5px] text-zinc-900 transition-[background-color,box-shadow,transform] duration-200 hover:bg-lime-300/10 hover:shadow-[inset_0_0_0_2px_#bef264] active:translate-y-px active:bg-lime-300/15 active:shadow-[inset_0_0_0_2px_#bef264] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#bef264] dark:text-white";
   const linkClasses = `${subBarInteractive} relative px-3 py-2`;
 
   const labelFor = (id: (typeof sectionNavIds)[number]) => {
@@ -185,7 +185,7 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
                 priority
                 className="h-5 w-auto sm:h-6"
               />
-              <span className="font-(family-name:--font-style-script) text-2xl leading-none text-white sm:text-[1.7rem]">
+              <span className="font-display text-2xl leading-none text-white sm:text-[1.7rem]">
                 Templio
               </span>
             </Link>
@@ -236,7 +236,7 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
                             aria-selected={selected}
                             className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm transition-colors ${
                               selected
-                                ? "bg-sky-500/15 text-sky-100"
+                                ? "bg-lime-300/15 text-lime-100"
                                 : "text-zinc-200 hover:bg-white/5 hover:text-white"
                             }`}
                             onClick={() => {
@@ -249,7 +249,9 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
                               {tLocaleName(code)}
                               <span
                                 className={
-                                  selected ? "text-sky-200/50" : "text-zinc-500"
+                                  selected
+                                    ? "text-lime-200/50"
+                                    : "text-zinc-500"
                                 }
                               >
                                 {" "}
@@ -257,7 +259,9 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
                               </span>
                               <span
                                 className={
-                                  selected ? "text-sky-200/80" : "text-zinc-400"
+                                  selected
+                                    ? "text-lime-200/80"
+                                    : "text-zinc-400"
                                 }
                               >
                                 {tLocale(code)}
@@ -316,7 +320,7 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
                             aria-selected={active}
                             className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm font-medium transition-colors ${
                               active
-                                ? "bg-sky-500/15 text-sky-100"
+                                ? "bg-lime-300/15 text-lime-100"
                                 : "text-zinc-200 hover:bg-white/5 hover:text-white"
                             }`}
                             onClick={() => {
@@ -354,7 +358,7 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
                     {labelFor(id)}
                     <span
                       aria-hidden
-                      className={`absolute inset-x-3 bottom-1 h-px bg-[#0696d7] transition-opacity duration-200 ${
+                      className={`absolute inset-x-3 bottom-1 h-px bg-lime-300 transition-opacity duration-200 ${
                         isActive ? "opacity-100" : "opacity-0"
                       }`}
                     />

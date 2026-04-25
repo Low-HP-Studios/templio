@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -111,21 +112,28 @@ function ShowcasePreviewCard({
   name,
   category,
   compact = false,
+  priority = false,
 }: {
   site: (typeof SHOWCASE_SITES)[number];
   name: string;
   category: string;
   compact?: boolean;
+  priority?: boolean;
 }) {
   const reduceMotion = useReducedMotion();
+  const accentStyle = {
+    "--site-accent": site.accent,
+    "--site-accent-rgb": site.accentRgb,
+  } as CSSProperties;
 
   return (
     <motion.a
       href={site.href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group relative isolate shrink-0 rounded-lg outline-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:border before:border-lime-300/45 before:opacity-0 before:transition-all before:duration-500 before:ease-out before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:border after:border-lime-300/30 after:opacity-0 after:transition-all after:duration-500 after:ease-out after:content-[''] hover:before:-translate-x-3 hover:before:translate-y-3 hover:before:opacity-100 hover:after:-translate-x-4 hover:after:translate-y-5 hover:after:opacity-100 focus-visible:ring-2 focus-visible:ring-lime-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black focus-visible:before:-translate-x-3 focus-visible:before:translate-y-3 focus-visible:before:opacity-100 focus-visible:after:-translate-x-4 focus-visible:after:translate-y-5 focus-visible:after:opacity-100 ${
-        compact ? "w-[22rem] sm:w-[28rem]" : "w-full"
+      style={accentStyle}
+      className={`group relative isolate shrink-0 rounded-lg outline-none before:pointer-events-none before:absolute before:-left-2 before:top-2 before:-z-10 before:h-full before:w-full before:rounded-[inherit] before:border before:border-[color:var(--site-accent)] before:opacity-0 before:transition-all before:duration-500 before:ease-out before:content-[''] after:pointer-events-none after:absolute after:-left-4 after:top-4 after:-z-10 after:h-full after:w-full after:rounded-[inherit] after:border after:border-[color:var(--site-accent)] after:opacity-0 after:transition-all after:duration-500 after:ease-out after:content-[''] hover:before:translate-y-[2.5px] hover:before:opacity-55 hover:after:translate-y-[5px] hover:after:opacity-35 focus-visible:ring-2 focus-visible:ring-[color:var(--site-accent)] focus-visible:ring-offset-4 focus-visible:ring-offset-black focus-visible:before:translate-y-[2.5px] focus-visible:before:opacity-55 focus-visible:after:translate-y-[5px] focus-visible:after:opacity-35 ${
+        compact ? "w-88 sm:w-md" : "w-full"
       }`}
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
@@ -140,22 +148,43 @@ function ShowcasePreviewCard({
         ease: [0.22, 1, 0.36, 1],
       }}
     >
-      <div className="relative aspect-[1.75] overflow-hidden rounded-lg border border-white/30 bg-zinc-950 shadow-2xl shadow-black/50 transition-colors duration-300 group-hover:border-lime-300 group-focus-visible:border-lime-300">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-[18px] top-[10%] -z-10 h-px w-6 origin-right rotate-[58deg] bg-[var(--site-accent)] opacity-0 transition-all duration-500 ease-out group-hover:translate-y-[5px] group-hover:opacity-45 group-focus-visible:translate-y-[5px] group-focus-visible:opacity-45"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-[18px] top-[90%] -z-10 h-px w-6 origin-right rotate-[58deg] bg-[var(--site-accent)] opacity-0 transition-all duration-500 ease-out group-hover:translate-y-[5px] group-hover:opacity-35 group-focus-visible:translate-y-[5px] group-focus-visible:opacity-35"
+      />
+      <div className="relative aspect-[1.75] overflow-hidden rounded-lg border border-white/30 bg-zinc-950 shadow-2xl shadow-black/50 transition-colors duration-300 group-hover:border-[color:var(--site-accent)] group-focus-visible:border-[color:var(--site-accent)]">
         <Image
           src={site.preview}
           alt={`${name} website preview`}
           fill
           sizes={compact ? "512px" : "(min-width: 768px) 50vw, 100vw"}
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 group-focus-visible:scale-110"
+          loading={priority ? "eager" : "lazy"}
+          preload={priority}
+          fetchPriority={priority ? "high" : "auto"}
+          className="object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-0 group-focus-visible:scale-110 group-focus-visible:opacity-0"
+        />
+        <Image
+          src={site.fullPagePreview}
+          alt=""
+          fill
+          sizes={compact ? "512px" : "(min-width: 768px) 50vw, 100vw"}
+          loading={priority ? "eager" : "lazy"}
+          preload={priority}
+          fetchPriority={priority ? "high" : "auto"}
+          className="object-cover object-top opacity-0 transition-opacity duration-500 ease-out group-hover:animate-[showcase-full-page-scroll_9s_ease-in-out_0.35s_forwards] group-hover:opacity-100 group-focus-visible:animate-[showcase-full-page-scroll_9s_ease-in-out_0.35s_forwards] group-focus-visible:opacity-100"
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-black/5 transition-opacity duration-500 group-hover:opacity-90 group-focus-visible:opacity-90" />
         <div
           aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(217,249,157,0.34),transparent_28%),linear-gradient(115deg,rgba(14,165,233,0.18),transparent_52%)] opacity-0 mix-blend-screen transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+          className="absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(var(--site-accent-rgb),0.34),transparent_28%),linear-gradient(115deg,rgba(var(--site-accent-rgb),0.2),transparent_52%)] opacity-0 mix-blend-screen transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-lime-300 transition-transform duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
+          className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-[var(--site-accent)] transition-transform duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
         />
       </div>
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 transition-transform duration-500 ease-out group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5">
@@ -358,28 +387,28 @@ export default function LandingPage() {
               transition={{ duration: 0.7, delay: 0.15 }}
               className="max-w-2xl text-left lg:max-w-3xl"
             >
+              <motion.p
+                className="mb-3 text-[0.65rem] font-medium uppercase leading-none tracking-[0.22em] text-zinc-400 sm:mb-3.5 sm:text-[0.7rem] md:tracking-[0.24em]"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.2 }}
+              >
+                {t("hero.eyebrow")}
+              </motion.p>
               <motion.h1
                 className="max-w-[12ch] text-balance text-4xl font-semibold leading-[0.98] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.25 }}
+                transition={{ duration: 0.6, delay: 0.28 }}
               >
                 {t("hero.h1")}
               </motion.h1>
-              <motion.p
-                className="mt-4 max-w-xl text-sm leading-6 text-zinc-200 sm:mt-5 sm:text-base sm:leading-7"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-              >
-                {t("hero.sub")}
-              </motion.p>
               <motion.a
                 href="#pitch"
-                className="mt-5 inline-flex items-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-zinc-950 transition-colors hover:bg-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black sm:mt-6"
+                className="mt-12 inline-flex items-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-zinc-950 transition-colors hover:bg-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black sm:mt-14 md:mt-16"
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.45 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
                 {t("hero.cta")}
                 <ArrowRightIcon className="h-4 w-4" />
@@ -422,13 +451,14 @@ export default function LandingPage() {
                 ref={showcaseRailRef}
                 className={`flex w-full min-w-0 gap-8 overflow-x-auto overflow-y-visible py-7 [scrollbar-width:none] sm:gap-10 [&::-webkit-scrollbar]:hidden ${RAIL_INSET}`}
               >
-                {SHOWCASE_SITES.map((site) => (
+                {SHOWCASE_SITES.map((site, index) => (
                   <ShowcasePreviewCard
                     key={site.href}
                     site={site}
                     name={tShowcaseSites(`${site.id}.name`)}
                     category={tShowcaseSites(`${site.id}.category`)}
                     compact
+                    priority={index < 2}
                   />
                 ))}
               </div>
@@ -713,6 +743,7 @@ export default function LandingPage() {
                           onChange={(e) => setIdea(e.target.value)}
                           onKeyDown={handleIdeaKeyDown}
                           rows={1}
+                          suppressHydrationWarning
                           className="field-sizing-content max-h-60 min-h-11 flex-1 resize-none self-center bg-transparent px-3 py-2.5 text-left text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none sm:text-base dark:text-white dark:placeholder:text-zinc-500"
                         />
                         <button
@@ -741,6 +772,7 @@ export default function LandingPage() {
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                          suppressHydrationWarning
                         />
                         <button
                           type="submit"
