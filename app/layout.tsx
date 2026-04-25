@@ -3,6 +3,7 @@ import { Inter_Tight, Style_Script } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import "./globals.css";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { htmlLangForLocale } from "@/i18n/routing";
 
 const interTight = Inter_Tight({
@@ -55,7 +56,9 @@ export default async function RootLayout({
       <body
         className={`${interTight.variable} ${styleScript.variable} antialiased`}
       >
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );

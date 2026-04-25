@@ -9,6 +9,10 @@
     "work": "Vorschau",
     "pitch": "Pitch",
     "selectLanguage": "Sprache wählen",
+    "selectTheme": "Design wählen",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "themeSystem": "System",
     "switchTheme": "Farbschema wechseln"
   },
   "localeLabel": {
@@ -18,12 +22,20 @@
     "de": "DE",
     "es": "ES"
   },
+  "localeName": {
+    "en": "Englisch",
+    "hi": "Hindi",
+    "zh": "Chinesisch (vereinfacht)",
+    "de": "Deutsch",
+    "es": "Spanisch"
+  },
   "hero": {
     "h1": "Individuelle Websites, handwerklich gebaut",
     "sub": "Pitch ein Portfolio, eine Fan-Seite, Studio-Seite oder eine skurrile Ecke des Internets. Wenn es Puls hat, bauen wir darum herum.",
     "cta": "Eine Seite pitchen",
     "stripTitle": "Websites mit Templio gebaut",
-    "stripCta": "Deins starten"
+    "scrollPrevious": "Vorherige Seiten anzeigen",
+    "scrollNext": "Weitere Seiten anzeigen"
   },
   "manifesto": {
     "kickerLine": "§ 01 — Die Absprache",

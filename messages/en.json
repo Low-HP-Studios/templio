@@ -9,6 +9,10 @@
     "work": "Preview",
     "pitch": "Pitch",
     "selectLanguage": "Select language",
+    "selectTheme": "Select theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
     "switchTheme": "Switch theme"
   },
   "localeLabel": {
@@ -18,12 +22,20 @@
     "de": "DE",
     "es": "ES"
   },
+  "localeName": {
+    "en": "English",
+    "hi": "Hindi",
+    "zh": "Chinese (Simplified)",
+    "de": "German",
+    "es": "Spanish"
+  },
   "hero": {
     "h1": "Custom websites that feel hand-built",
     "sub": "Pitch a portfolio, fan site, studio page, or strange little corner of the internet. If it has a pulse, we can build around it.",
     "cta": "Pitch a site",
     "stripTitle": "Websites built with Templio",
-    "stripCta": "Start yours"
+    "scrollPrevious": "Scroll back through sites",
+    "scrollNext": "Scroll to more sites"
   },
   "manifesto": {
     "kickerLine": "§ 01 — The deal",

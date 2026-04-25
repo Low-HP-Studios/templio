@@ -11,18 +11,18 @@ export function Footer() {
         size="lg"
         className="flex flex-col items-center justify-between gap-4 py-6 text-sm sm:flex-row sm:gap-0 sm:py-8 sm:text-base"
       >
-        <p className="text-white/50">
+        <p className="text-zinc-500 dark:text-white/50">
           {t("by")}{" "}
           <a
             href="https://www.ayush.im"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-bold text-white underline transition-opacity hover:opacity-80"
+            className="font-bold text-zinc-800 underline transition-opacity hover:opacity-80 dark:text-white"
           >
             Ayush Rameja
           </a>
         </p>
-        <p className="text-white/50">{t("copyright")}</p>
+        <p className="text-zinc-500 dark:text-white/50">{t("copyright")}</p>
       </Container>
     </footer>
   );

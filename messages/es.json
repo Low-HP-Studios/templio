@@ -9,6 +9,10 @@
     "work": "Vistazo",
     "pitch": "Propuesta",
     "selectLanguage": "Elegir idioma",
+    "selectTheme": "Elegir tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema",
     "switchTheme": "Cambiar tema"
   },
   "localeLabel": {
@@ -18,12 +22,20 @@
     "de": "DE",
     "es": "ES"
   },
+  "localeName": {
+    "en": "Inglés",
+    "hi": "Hindi",
+    "zh": "Chino (simplificado)",
+    "de": "Alemán",
+    "es": "Español"
+  },
   "hero": {
     "h1": "Webs a medida con sensación de hechas a mano",
     "sub": "Cuenta un portfolio, un fan site, una página de estudio o un rincón raro. Si vibra, podemos levantar algo alrededor.",
     "cta": "Lanza tu idea",
     "stripTitle": "Webs creadas con Templio",
-    "stripCta": "Empieza la tuya"
+    "scrollPrevious": "Ver sitios anteriores",
+    "scrollNext": "Ver más sitios"
   },
   "manifesto": {
     "kickerLine": "§ 01 — El trato",
