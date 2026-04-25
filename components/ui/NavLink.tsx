@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ComponentProps } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/navigation";
 
 interface NavLinkProps extends ComponentProps<typeof Link> {
   children: React.ReactNode;

@@ -74,7 +74,7 @@ export function VideoBackground({
 
   return (
     <div
-      className={`pointer-events-none absolute inset-0 -z-10 overflow-hidden ${className}`}
+      className={`pointer-events-none absolute inset-0 z-0 overflow-hidden ${className}`}
     >
       {poster && (
         <div
@@ -103,7 +103,7 @@ export function VideoBackground({
         <source src={src} type="video/mp4" />
       </video>
 
-      <div className="absolute inset-0 bg-black/65" />
+      <div className="absolute inset-0 bg-black/30" />
       <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
     </div>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui";
 import { useState } from "react";
 import { useMutation, useAction } from "convex/react";
@@ -8,6 +9,7 @@ import { toast, Toaster } from "sonner";
 import { api } from "@/convex/_generated/api";
 
 export default function ContactPage() {
+  const t = useTranslations("contact");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,13 +47,13 @@ export default function ContactPage() {
 
       setStatus("success");
       setFormData({ name: "", email: "", message: "" });
-      toast.success("Message sent successfully. We'll get back to you soon.");
+      toast.success(t("successToast"));
 
       setTimeout(() => setStatus("idle"), 3000);
     } catch (error) {
       setStatus("error");
       console.error(error);
-      toast.error("Failed to send message. Please try again.");
+      toast.error(t("errorToast"));
       setTimeout(() => setStatus("idle"), 3000);
     }
   };
@@ -76,11 +78,10 @@ export default function ContactPage() {
           className="mb-12 text-center"
         >
           <h1 className="mb-4 text-4xl leading-tight text-white sm:text-5xl md:text-6xl">
-            Contact Templio
+            {t("title")}
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-zinc-400 sm:text-xl">
-            Questions about a pitch, a site that&apos;s live, or just want to
-            say hi? Drop a note.
+            {t("subtitle")}
           </p>
         </motion.div>
 
@@ -100,7 +101,7 @@ export default function ContactPage() {
                   htmlFor="name"
                   className="mb-2 block text-sm font-medium text-white"
                 >
-                  Name
+                  {t("nameLabel")}
                 </label>
                 <input
                   type="text"
@@ -110,7 +111,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   className="w-full rounded-lg border border-white/10 bg-zinc-800/50 px-4 py-3 text-white placeholder-zinc-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                  placeholder="Your name"
+                  placeholder={t("namePlaceholder")}
                 />
               </div>
 
@@ -119,7 +120,7 @@ export default function ContactPage() {
                   htmlFor="email"
                   className="mb-2 block text-sm font-medium text-white"
                 >
-                  Email
+                  {t("emailLabel")}
                 </label>
                 <input
                   type="email"
@@ -129,7 +130,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   className="w-full rounded-lg border border-white/10 bg-zinc-800/50 px-4 py-3 text-white placeholder-zinc-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                  placeholder="your.email@example.com"
+                  placeholder={t("emailPlaceholder")}
                 />
               </div>
 
@@ -138,7 +139,7 @@ export default function ContactPage() {
                   htmlFor="message"
                   className="mb-2 block text-sm font-medium text-white"
                 >
-                  Message
+                  {t("messageLabel")}
                 </label>
                 <textarea
                   id="message"
@@ -148,7 +149,7 @@ export default function ContactPage() {
                   required
                   rows={6}
                   className="w-full resize-none rounded-lg border border-white/10 bg-zinc-800/50 px-4 py-3 text-white placeholder-zinc-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                  placeholder="Your message..."
+                  placeholder={t("messagePlaceholder")}
                 />
               </div>
 
@@ -157,7 +158,7 @@ export default function ContactPage() {
                 disabled={status === "loading"}
                 className="w-full rounded-lg bg-white px-6 py-3 font-semibold text-zinc-900 transition-all hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {status === "loading" ? "Sending..." : "Send Inquiry"}
+                {status === "loading" ? t("sending") : t("submit")}
               </button>
             </div>
           </form>
@@ -168,7 +169,7 @@ export default function ContactPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-8 text-center text-sm text-zinc-500"
           >
-            Prefer a direct intro? Reach the founder via{" "}
+            {t("footerNote")}{" "}
             <a
               href="https://www.ayush.im"
               target="_blank"

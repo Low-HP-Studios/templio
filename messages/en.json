@@ -1,0 +1,111 @@
+{
+  "metadata": {
+    "title": "Templio - Custom websites, built with care",
+    "description": "Custom websites for people who still care how the web feels. Pitch an idea. If it's interesting, we build it together."
+  },
+  "nav": {
+    "home": "Home",
+    "manifesto": "Manifesto",
+    "work": "Preview",
+    "pitch": "Pitch",
+    "selectLanguage": "Select language",
+    "switchTheme": "Switch theme"
+  },
+  "localeLabel": {
+    "en": "EN",
+    "hi": "HI",
+    "zh": "中文",
+    "de": "DE",
+    "es": "ES"
+  },
+  "hero": {
+    "h1": "Custom websites that feel hand-built",
+    "sub": "Pitch a portfolio, fan site, studio page, or strange little corner of the internet. If it has a pulse, we can build around it.",
+    "cta": "Pitch a site",
+    "stripTitle": "Websites built with Templio",
+    "stripCta": "Start yours"
+  },
+  "manifesto": {
+    "kickerLine": "§ 01 — The deal",
+    "kicker": "The deal",
+    "heading": "Most websites are the same template in a different color.",
+    "headingHighlight": "template",
+    "body1": "Templio is for the people still excited about the web. The ones who notice a good hover state, a weird font choice, a layout that isn't trying to be Linear.",
+    "body2": "Pitch me an idea. If it's interesting, we build it - for free, together, at whatever pace works. No invoices, no sales calls, no templates.",
+    "finePrint": "I take on a few of these at a time, so it might take a minute to hear back. I read every pitch."
+  },
+  "showcase": {
+    "kickerLine": "§ 02 — Take a closer look",
+    "kicker": "Take a closer look",
+    "heading": "Every one started as a pitch.",
+    "headingHighlight": "pitch",
+    "subheading": "Full descriptions, categories, and live links to the sites currently up.",
+    "note": "More in progress. Yours could be here.",
+    "builtWith": "{n} — Built with Templio",
+    "visitLive": "Visit live site"
+  },
+  "showcaseSites": {
+    "ayush": {
+      "name": "Ayush Rameja",
+      "category": "Founder",
+      "description": "A personal site with crisp writing, focused motion, and a sharp product-builder identity."
+    },
+    "bikram": {
+      "name": "Bikramdeep Singh",
+      "category": "Portfolio",
+      "description": "A data-focused portfolio with editorial typography, layered atmospherics, and a polished contact surface."
+    },
+    "arnold": {
+      "name": "Arnold Kevin Desouza",
+      "category": "Portfolio",
+      "description": "A bold single-page profile with strong identity, sharp type choices, and a stripped-back hero-led experience."
+    },
+    "lowhp": {
+      "name": "Low HP Studio",
+      "category": "Studio",
+      "description": "A studio landing page tuned for product storytelling, calm pacing, and crisp product positioning."
+    },
+    "lunaticladz": {
+      "name": "LunaticLadz",
+      "category": "Community",
+      "description": "A community-driven site built around streams, updates, and social hooks with a louder visual personality."
+    }
+  },
+  "pitchSection": {
+    "kicker": "Pitch Templio",
+    "heading": "Send the idea. I'll read it properly.",
+    "bodyBeforeLink": "Tell me what you want to build, then leave an email. For a direct intro, reach the founder through",
+    "bodyAfterLink": "."
+  },
+  "form": {
+    "ideaPlaceholder": "What do you want to build?",
+    "emailPlaceholder": "Your email",
+    "nextLabel": "Next",
+    "submitLabel": "Send the pitch",
+    "editIdeaLabel": "Edit idea",
+    "successMessage": "Got it. I'll read it properly and reach out. Thank you.",
+    "alreadyExistsMessage": "You've already pitched - I haven't forgotten. Promise.",
+    "pitchReceivedToast": "Pitch received.",
+    "invalidEmailToast": "Please enter a valid email address.",
+    "errorToast": "Failed to send your pitch. Please try again."
+  },
+  "footer": {
+    "by": "By",
+    "copyright": "Templio © 2026"
+  },
+  "contact": {
+    "title": "Contact Templio",
+    "subtitle": "Questions about a pitch, a site that's live, or just want to say hi? Drop a note.",
+    "nameLabel": "Name",
+    "namePlaceholder": "Your name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "your.email@example.com",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Your message...",
+    "sending": "Sending...",
+    "submit": "Send Inquiry",
+    "footerNote": "Prefer a direct intro? Reach the founder via",
+    "successToast": "Message sent successfully. We'll get back to you soon.",
+    "errorToast": "Failed to send message. Please try again."
+  }
+}

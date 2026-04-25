@@ -1,0 +1,111 @@
+{
+  "metadata": {
+    "title": "Templio - Sitios hechos a medida, con mimo",
+    "description": "Sitios web a medida para quien aún cuida cómo se siente la red. Cuenta una idea. Si encaja, lo construimos juntos."
+  },
+  "nav": {
+    "home": "Inicio",
+    "manifesto": "Manifiesto",
+    "work": "Vistazo",
+    "pitch": "Propuesta",
+    "selectLanguage": "Elegir idioma",
+    "switchTheme": "Cambiar tema"
+  },
+  "localeLabel": {
+    "en": "EN",
+    "hi": "HI",
+    "zh": "中文",
+    "de": "DE",
+    "es": "ES"
+  },
+  "hero": {
+    "h1": "Webs a medida con sensación de hechas a mano",
+    "sub": "Cuenta un portfolio, un fan site, una página de estudio o un rincón raro. Si vibra, podemos levantar algo alrededor.",
+    "cta": "Lanza tu idea",
+    "stripTitle": "Webs creadas con Templio",
+    "stripCta": "Empieza la tuya"
+  },
+  "manifesto": {
+    "kickerLine": "§ 01 — El trato",
+    "kicker": "El trato",
+    "heading": "Casi todos los sitios son la misma plantilla con otro color.",
+    "headingHighlight": "plantilla",
+    "body1": "Templio es para quien aún mira el web con ojos de niño. El hover bien hecho, un tipo raro, un layout que no copia a Linear.",
+    "body2": "Cuenta una idea. Si mola, la construimos: gratis, juntos, al ritmo que toque. Sin facturas, sin llamadas de venta, sin plantillas.",
+    "finePrint": "Acepto unas cuantas a la vez, así que puede haber tiento en responder. Leo cada idea."
+  },
+  "showcase": {
+    "kickerLine": "§ 02 — Míralo con calma",
+    "kicker": "Míralo con calma",
+    "heading": "Cada una empezó siendo un pitch.",
+    "headingHighlight": "pitch",
+    "subheading": "Textos, categorías y enlaces a lo que ya está en línea.",
+    "note": "Siguen saliendo. La tuya podría quedar aquí.",
+    "builtWith": "{n} — Hecho con Templio",
+    "visitLive": "Visitar la web en vivo"
+  },
+  "showcaseSites": {
+    "ayush": {
+      "name": "Ayush Rameja",
+      "category": "Fundador",
+      "description": "Un sitio personal con texto claro, buen movimiento e identidad de alguien que construye producto."
+    },
+    "bikram": {
+      "name": "Bikramdeep Singh",
+      "category": "Portfolio",
+      "description": "Un portfolio con datos, tipografía editorial, ambiente cuidado y un contacto pulido."
+    },
+    "arnold": {
+      "name": "Arnold Kevin Desouza",
+      "category": "Portfolio",
+      "description": "Un perfil en una sola página, con voz clara, tipos fuertes y un hero mínimo."
+    },
+    "lowhp": {
+      "name": "Low HP Studio",
+      "category": "Estudio",
+      "description": "Una landing de estudio para contar un producto con calma y mensaje afinado."
+    },
+    "lunaticladz": {
+      "name": "LunaticLadz",
+      "category": "Comunidad",
+      "description": "Una web de comunidad con streams, novedades y un estilo con más volumen."
+    }
+  },
+  "pitchSection": {
+    "kicker": "Pitea Templio",
+    "heading": "Manda la idea. Te la leo en serio.",
+    "bodyBeforeLink": "Dime qué quieres construir y deja un correo. Para un contacto directo con el fundador:",
+    "bodyAfterLink": "."
+  },
+  "form": {
+    "ideaPlaceholder": "¿Qué quieres construir?",
+    "emailPlaceholder": "Tu email",
+    "nextLabel": "Siguiente",
+    "submitLabel": "Enviar la idea",
+    "editIdeaLabel": "Editar la idea",
+    "successMessage": "Listo. Te leo y te escribo. Gracias.",
+    "alreadyExistsMessage": "Ya nos escribiste antes. No se me olvida. Prometido.",
+    "pitchReceivedToast": "Idea recibida.",
+    "invalidEmailToast": "Escribe un email válido, por favor.",
+    "errorToast": "No se pudo enviar. Vuelve a intentarlo."
+  },
+  "footer": {
+    "by": "Por",
+    "copyright": "Templio © 2026"
+  },
+  "contact": {
+    "title": "Contacto Templio",
+    "subtitle": "¿Dudas sobre un pitch, un sitio en línea, o un hola? Escríbenos.",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "emailLabel": "Email",
+    "emailPlaceholder": "tucorreo@ejemplo.com",
+    "messageLabel": "Mensaje",
+    "messagePlaceholder": "Tu mensaje...",
+    "sending": "Enviando...",
+    "submit": "Enviar",
+    "footerNote": "¿Prefieres un contacto directo? El fundador en",
+    "successToast": "Mensaje enviado. Te respondemos pronto.",
+    "errorToast": "No se pudo enviar. Prueba otra vez."
+  }
+}
