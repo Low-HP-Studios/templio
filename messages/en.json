@@ -82,6 +82,11 @@
       "name": "LunaticLadz",
       "category": "Community",
       "description": "A community-driven site built around streams, updates, and social hooks with a louder visual personality."
+    },
+    "masala": {
+      "name": "Masala Indian Restaurant",
+      "category": "Restaurant",
+      "description": "A warm restaurant site with menu browsing, reservation prompts, review links, and rich food-led visuals."
     }
   },
   "pitchSection": {
