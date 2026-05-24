@@ -1,7 +1,7 @@
 export type ShowcaseTemplate = "portfolio" | "studio" | "community" | "founder";
 
 export interface ShowcaseSite {
-  id: "ayush" | "bikram" | "arnold" | "lowhp" | "lunaticladz";
+  id: "ayush" | "bikram" | "arnold" | "lowhp" | "lunaticladz" | "masala";
   href: string;
   urlLabel: string;
   template: ShowcaseTemplate;
@@ -63,5 +63,15 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     fullPagePreview: "/full-page-previews/Lunatic-ladz.png",
     accent: "#f97316",
     accentRgb: "249,115,22",
+  },
+  {
+    id: "masala",
+    href: "https://masala-indian-restaurant.vercel.app/en",
+    urlLabel: "masala-indian-restaurant.vercel.app",
+    template: "studio",
+    preview: "/previews/masala-indian-restaurant.png",
+    fullPagePreview: "/full-page-previews/masala-indian-restaurant.png",
+    accent: "#d97706",
+    accentRgb: "217,119,6",
   },
 ];

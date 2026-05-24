@@ -82,6 +82,11 @@
       "name": "LunaticLadz",
       "category": "Comunidad",
       "description": "Una web de comunidad con streams, novedades y un estilo con más volumen."
+    },
+    "masala": {
+      "name": "Masala Indian Restaurant",
+      "category": "Restaurante",
+      "description": "Una web cálida de restaurante con menú, llamadas a reservar, reseñas y visuales ricos centrados en la comida."
     }
   },
   "pitchSection": {
