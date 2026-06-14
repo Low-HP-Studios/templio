@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useAction, useMutation } from "convex/react";
@@ -10,19 +10,15 @@ import { useTranslations } from "next-intl";
 
 import { api } from "@/convex/_generated/api";
 import { SHOWCASE_SITES } from "@/constants";
-import {
-  Container,
-  Footer,
-  Navbar,
-  ThemeToaster,
-  VideoBackground,
-} from "@/components/ui";
+import { Container, Footer, Navbar, ThemeToaster } from "@/components/ui";
 
 type Step = "idea" | "email";
 type Status = "idle" | "loading" | "success" | "already_exists" | "error";
-
-const RAIL_INSET =
-  "pl-[max(1rem,calc(50vw-45rem+1rem))] pr-[max(1rem,calc(50vw-45rem+1rem))] sm:pl-[max(1.5rem,calc(50vw-45rem+1.5rem))] sm:pr-[max(1.5rem,calc(50vw-45rem+1.5rem))] lg:pl-[max(2rem,calc(50vw-45rem+2rem))] lg:pr-[max(2rem,calc(50vw-45rem+2rem))]";
+type HeroShowcaseItem = {
+  site: (typeof SHOWCASE_SITES)[number];
+  name: string;
+  category: string;
+};
 
 function ArrowRightIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
@@ -41,40 +37,6 @@ function ArrowRightIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-function RailChevronLeft({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <path d="M12.5 5.5L7.5 10l5 4.5" />
-    </svg>
-  );
-}
-
-function RailChevronRight({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <path d="M7.5 5.5L12.5 10l-5 4.5" />
-    </svg>
-  );
-}
-
 function EmphasisText({
   text,
   highlight,
@@ -86,6 +48,7 @@ function EmphasisText({
     `(${highlight.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
     "i"
   );
+
   return (
     <>
       {text
@@ -95,7 +58,7 @@ function EmphasisText({
           part.toLowerCase() === highlight.toLowerCase() ? (
             <span
               key={i}
-              className="font-display text-[1.15em] leading-none text-sky-700 dark:text-sky-100"
+              className="font-display text-[1.14em] leading-none text-sky-700 dark:text-sky-200"
             >
               {part}
             </span>
@@ -107,18 +70,164 @@ function EmphasisText({
   );
 }
 
-function ShowcasePreviewCard({
+function SectionKicker({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="min-w-0 break-words text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400">
+      {children}
+    </p>
+  );
+}
+
+function HeroShowcaseCarousel({ items }: { items: HeroShowcaseItem[] }) {
+  const reduceMotion = useReducedMotion();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = items[activeIndex] ?? items[0];
+
+  useEffect(() => {
+    if (items.length < 2) return;
+
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((index) => (index + 1) % items.length);
+    }, 4200);
+
+    return () => window.clearInterval(intervalId);
+  }, [items.length, reduceMotion]);
+
+  if (!active) return null;
+
+  const accentStyle = {
+    "--site-accent": active.site.accent,
+    "--site-accent-rgb": active.site.accentRgb,
+  } as CSSProperties;
+
+  return (
+    <div
+      className="relative"
+      style={accentStyle}
+      data-hero-showcase
+      data-active-site={active.site.id}
+    >
+      <motion.a
+        href={active.site.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] focus-visible:ring-offset-4 focus-visible:ring-offset-zinc-50 dark:focus-visible:ring-offset-zinc-950"
+        whileHover={reduceMotion ? undefined : { y: -4 }}
+        transition={{ duration: reduceMotion ? 0 : 0.35 }}
+      >
+        <div className="relative aspect-[1.18] overflow-hidden rounded-lg border border-zinc-200 bg-zinc-950 shadow-[0_26px_90px_rgba(15,23,42,0.16)] dark:border-white/10 dark:shadow-[0_26px_90px_rgba(0,0,0,0.55)]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active.site.id}
+              className="absolute inset-0"
+              initial={
+                reduceMotion
+                  ? false
+                  : {
+                      clipPath: "inset(0 0 18% 0)",
+                      opacity: 0,
+                      scale: 1.025,
+                      y: 18,
+                    }
+              }
+              animate={{
+                clipPath: "inset(0 0 0% 0)",
+                opacity: 1,
+                scale: 1,
+                y: 0,
+              }}
+              exit={
+                reduceMotion
+                  ? { opacity: 0 }
+                  : {
+                      clipPath: "inset(16% 0 0 0)",
+                      opacity: 0,
+                      scale: 0.985,
+                      y: -18,
+                    }
+              }
+              transition={{
+                duration: reduceMotion ? 0 : 0.65,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <Image
+                src={active.site.preview}
+                alt={`${active.name} website preview`}
+                fill
+                loading={activeIndex === 0 ? "eager" : "lazy"}
+                fetchPriority={activeIndex === 0 ? "high" : "auto"}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover object-top"
+              />
+            </motion.div>
+          </AnimatePresence>
+
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-[linear-gradient(180deg,transparent_44%,rgba(0,0,0,0.78)_100%)]"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-0 h-1 bg-[var(--site-accent)]"
+          />
+          <div className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-zinc-300">
+              {active.category}
+            </p>
+            <div className="mt-2 flex items-end justify-between gap-4">
+              <div className="min-w-0">
+                <h2 className="truncate text-2xl font-semibold leading-tight sm:text-3xl">
+                  {active.name}
+                </h2>
+                <p className="mt-1 truncate text-sm font-medium text-zinc-300">
+                  {active.site.urlLabel}
+                </p>
+              </div>
+              <span className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/25 bg-white/10 text-white backdrop-blur-sm transition group-hover:bg-white group-hover:text-zinc-950 sm:flex">
+                <ArrowRightIcon className="h-4 w-4" />
+              </span>
+            </div>
+          </div>
+        </div>
+      </motion.a>
+
+      <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
+        {items.map((item, index) => {
+          const isActive = index === activeIndex;
+
+          return (
+            <button
+              key={item.site.href}
+              type="button"
+              aria-label={`${item.name} preview`}
+              aria-pressed={isActive}
+              className={`h-1.5 rounded-full transition ${
+                isActive
+                  ? "bg-zinc-950 dark:bg-white"
+                  : "bg-zinc-200 hover:bg-zinc-300 dark:bg-white/15 dark:hover:bg-white/30"
+              }`}
+              onClick={() => setActiveIndex(index)}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ShowcaseCard({
   site,
   name,
   category,
-  compact = false,
-  priority = false,
+  description,
+  index,
 }: {
   site: (typeof SHOWCASE_SITES)[number];
   name: string;
   category: string;
-  compact?: boolean;
-  priority?: boolean;
+  description: string;
+  index: number;
 }) {
   const reduceMotion = useReducedMotion();
   const accentStyle = {
@@ -132,76 +241,52 @@ function ShowcasePreviewCard({
       target="_blank"
       rel="noopener noreferrer"
       style={accentStyle}
-      className={`group relative isolate shrink-0 rounded-lg outline-none before:pointer-events-none before:absolute before:-left-2 before:top-2 before:-z-10 before:h-full before:w-full before:rounded-[inherit] before:border before:border-[color:var(--site-accent)] before:opacity-0 before:transition-all before:duration-500 before:ease-out before:content-[''] after:pointer-events-none after:absolute after:-left-4 after:top-4 after:-z-10 after:h-full after:w-full after:rounded-[inherit] after:border after:border-[color:var(--site-accent)] after:opacity-0 after:transition-all after:duration-500 after:ease-out after:content-[''] hover:before:translate-y-[2.5px] hover:before:opacity-55 hover:after:translate-y-[5px] hover:after:opacity-35 focus-visible:ring-2 focus-visible:ring-[color:var(--site-accent)] focus-visible:ring-offset-4 focus-visible:ring-offset-black focus-visible:before:translate-y-[2.5px] focus-visible:before:opacity-55 focus-visible:after:translate-y-[5px] focus-visible:after:opacity-35 ${
-        compact ? "w-88 sm:w-md" : "w-full"
-      }`}
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={
-        reduceMotion ? undefined : { y: -5, width: compact ? "32rem" : "100%" }
-      }
-      whileFocus={
-        reduceMotion ? undefined : { y: -5, width: compact ? "32rem" : "100%" }
-      }
+      className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-zinc-200 bg-white outline-none transition-colors hover:border-[color:var(--site-accent)] focus-visible:ring-2 focus-visible:ring-[color:var(--site-accent)] focus-visible:ring-offset-4 focus-visible:ring-offset-zinc-50 dark:border-white/10 dark:bg-zinc-950 dark:focus-visible:ring-offset-zinc-950"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      viewport={{ once: true, margin: "-80px" }}
       transition={{
-        duration: reduceMotion ? 0 : 0.45,
-        ease: [0.22, 1, 0.36, 1],
+        duration: reduceMotion ? 0 : 0.5,
+        delay: reduceMotion ? 0 : index * 0.04,
       }}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-[18px] top-[10%] -z-10 h-px w-6 origin-right rotate-[58deg] bg-[var(--site-accent)] opacity-0 transition-all duration-500 ease-out group-hover:translate-y-[5px] group-hover:opacity-45 group-focus-visible:translate-y-[5px] group-focus-visible:opacity-45"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-[18px] top-[90%] -z-10 h-px w-6 origin-right rotate-[58deg] bg-[var(--site-accent)] opacity-0 transition-all duration-500 ease-out group-hover:translate-y-[5px] group-hover:opacity-35 group-focus-visible:translate-y-[5px] group-focus-visible:opacity-35"
-      />
-      <div className="relative aspect-[1.75] overflow-hidden rounded-lg border border-white/30 bg-zinc-950 shadow-2xl shadow-black/50 transition-colors duration-300 group-hover:border-[color:var(--site-accent)] group-focus-visible:border-[color:var(--site-accent)]">
+      <div className="relative aspect-[1.65] overflow-hidden border-b border-zinc-200 bg-zinc-950 dark:border-white/10">
         <Image
           src={site.preview}
           alt={`${name} website preview`}
           fill
-          sizes={compact ? "512px" : "(min-width: 768px) 50vw, 100vw"}
-          loading={priority ? "eager" : "lazy"}
-          preload={priority}
-          fetchPriority={priority ? "high" : "auto"}
-          className="object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:opacity-0 group-focus-visible:scale-110 group-focus-visible:opacity-0"
-        />
-        <Image
-          src={site.fullPagePreview}
-          alt=""
-          fill
-          sizes={compact ? "512px" : "(min-width: 768px) 50vw, 100vw"}
-          loading={priority ? "eager" : "lazy"}
-          preload={priority}
-          fetchPriority={priority ? "high" : "auto"}
-          className="object-cover object-top opacity-0 transition-opacity duration-500 ease-out group-hover:animate-[showcase-full-page-scroll_9s_ease-in-out_0.35s_forwards] group-hover:opacity-100 group-focus-visible:animate-[showcase-full-page-scroll_9s_ease-in-out_0.35s_forwards] group-focus-visible:opacity-100"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/25 to-black/5 transition-opacity duration-500 group-hover:opacity-90 group-focus-visible:opacity-90" />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[radial-gradient(circle_at_24%_20%,rgba(var(--site-accent-rgb),0.34),transparent_28%),linear-gradient(115deg,rgba(var(--site-accent-rgb),0.2),transparent_52%)] opacity-0 mix-blend-screen transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100"
+          sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105 group-focus-visible:scale-105"
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-1 origin-left scale-x-0 bg-[var(--site-accent)] transition-transform duration-500 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
+          className="absolute inset-x-0 top-0 h-1 bg-[var(--site-accent)]"
         />
       </div>
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 transition-transform duration-500 ease-out group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5">
-        <div className="min-w-0">
-          <p className="text-xs font-medium uppercase tracking-[0.22em] text-zinc-300/75">
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-3">
+          <p className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-[0.24em] text-zinc-500 dark:text-zinc-400">
             {category}
           </p>
-          <h3 className="mt-1 truncate text-lg font-semibold leading-tight text-white">
-            {name}
-          </h3>
-          <p className="mt-2 max-w-44 translate-y-2 text-xs font-medium text-zinc-200 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-            {site.urlLabel}
-          </p>
+          <span className="text-xs font-medium tabular-nums text-zinc-400">
+            {String(index + 1).padStart(2, "0")}
+          </span>
         </div>
-        <span className="flex h-9 w-9 shrink-0 translate-y-2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white opacity-0 backdrop-blur-md transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-          <ArrowRightIcon className="h-4 w-4" />
-        </span>
+        <h3 className="mt-4 text-2xl font-semibold leading-tight text-zinc-950 dark:text-white">
+          {name}
+        </h3>
+        <p className="mt-3 flex-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+          {description}
+        </p>
+        <div className="mt-6 flex items-center justify-between gap-4 text-sm font-semibold">
+          <span className="min-w-0 truncate text-zinc-500 dark:text-zinc-400">
+            {site.urlLabel}
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1.5 text-zinc-950 transition group-hover:text-[var(--site-accent)] dark:text-white">
+            <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        </div>
       </div>
     </motion.a>
   );
@@ -218,41 +303,11 @@ export default function LandingPage() {
   const [status, setStatus] = useState<Status>("idle");
   const ideaInputRef = useRef<HTMLTextAreaElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
-  const showcaseRailRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const syncShowcaseArrows = useCallback(() => {
-    const el = showcaseRailRef.current;
-    if (!el) return;
-    const { scrollLeft, scrollWidth, clientWidth } = el;
-    const max = scrollWidth - clientWidth;
-    setCanScrollLeft(scrollLeft > 2);
-    setCanScrollRight(max > 2 && scrollLeft < max - 2);
-  }, []);
-
-  useEffect(() => {
-    const el = showcaseRailRef.current;
-    if (!el) return;
-    syncShowcaseArrows();
-    const onScroll = () => syncShowcaseArrows();
-    el.addEventListener("scroll", onScroll, { passive: true });
-    const ro = new ResizeObserver(() => syncShowcaseArrows());
-    ro.observe(el);
-    window.addEventListener("resize", onScroll);
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      ro.disconnect();
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [syncShowcaseArrows]);
-
-  const scrollShowcase = (dir: -1 | 1) => {
-    const el = showcaseRailRef.current;
-    if (!el) return;
-    const step = Math.max(220, Math.round(el.clientWidth * 0.75));
-    el.scrollBy({ left: dir * step, behavior: "smooth" });
-  };
+  const heroShowcaseItems = SHOWCASE_SITES.map((site) => ({
+    site,
+    name: tShowcaseSites(`${site.id}.name`),
+    category: tShowcaseSites(`${site.id}.category`),
+  }));
 
   const joinWaitlist = useMutation(api.waitlist.join);
   const sendWelcomeEmail = useAction(api.waitlistEmail.sendWelcomeEmail);
@@ -356,456 +411,317 @@ export default function LandingPage() {
         : "";
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-clip bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-white">
       <ThemeToaster />
-      <Navbar includeSpacer={false} />
+      <Navbar />
 
-      <section
-        id="home"
-        className="relative isolate flex max-h-screen min-h-[720px] w-full flex-col overflow-hidden scroll-mt-28 bg-black"
-      >
-        <div aria-hidden className="h-27 shrink-0" />
-        <VideoBackground src="/clouds-bg.mp4" poster="/preview-clouds.png" />
-
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 z-1 bg-[linear-gradient(90deg,rgba(0,0,0,0.86)_0%,rgba(0,0,0,0.76)_24%,rgba(0,0,0,0.28)_58%,rgba(0,0,0,0.48)_100%)]"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-1 h-56 bg-linear-to-t from-black via-black/55 to-transparent"
-        />
-
-        <div className="relative z-10 flex min-h-0 w-full flex-1 flex-col items-stretch pb-4 pt-4 sm:pb-6 sm:pt-6 lg:pb-8 lg:pt-8">
+      <main>
+        <section
+          id="home"
+          className="scroll-mt-[calc(var(--templio-nav-height,4.5rem)+1rem)] border-b border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-zinc-950"
+        >
           <Container
             size="xl"
-            className="flex min-h-0 flex-col justify-center gap-6 py-2 sm:gap-8 md:gap-10 lg:gap-12"
+            className="grid min-h-[calc(100svh-var(--templio-nav-height,4.5rem)-2rem)] items-center gap-10 py-12 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:py-16 lg:gap-14"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="max-w-2xl text-left lg:max-w-3xl"
-            >
-              <motion.p
-                className="mb-3 text-[0.65rem] font-medium uppercase leading-none tracking-[0.22em] text-zinc-400 sm:mb-3.5 sm:text-[0.7rem] md:tracking-[0.24em]"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.2 }}
-              >
+            <div className="max-w-3xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">
                 {t("hero.eyebrow")}
-              </motion.p>
-              <motion.h1
-                className="max-w-[12ch] text-balance text-4xl font-semibold leading-[0.98] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.28 }}
-              >
+              </p>
+              <h1 className="mt-5 max-w-[11ch] text-balance text-5xl font-semibold leading-[0.95] tracking-tight text-zinc-950 sm:text-6xl lg:text-7xl dark:text-white">
                 {t("hero.h1")}
-              </motion.h1>
-              <motion.a
-                href="#pitch"
-                className="mt-12 inline-flex items-center gap-3 rounded-md bg-white px-5 py-3 text-sm font-semibold text-zinc-950 transition-colors hover:bg-lime-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 focus-visible:ring-offset-4 focus-visible:ring-offset-black sm:mt-14 md:mt-16"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-              >
-                {t("hero.cta")}
-                <ArrowRightIcon className="h-4 w-4" />
-              </motion.a>
+              </h1>
+              <p className="mt-6 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg dark:text-zinc-300">
+                {t("hero.sub")}
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="#pitch"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-zinc-950 px-5 text-sm font-semibold text-white transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200"
+                >
+                  {t("hero.cta")}
+                  <ArrowRightIcon className="h-4 w-4" />
+                </a>
+                <a
+                  href="#work"
+                  className="inline-flex h-12 items-center justify-center rounded-md border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-900 transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 dark:border-white/10 dark:bg-zinc-900 dark:text-white dark:hover:border-white/20 dark:hover:bg-zinc-800"
+                >
+                  {t("nav.work")}
+                </a>
+              </div>
+            </div>
+
+            <div className="min-w-0">
+              <HeroShowcaseCarousel items={heroShowcaseItems} />
+            </div>
+          </Container>
+        </section>
+
+        <section
+          id="manifesto"
+          className="relative isolate overflow-hidden scroll-mt-[calc(var(--templio-nav-height,4.5rem)+1.5rem)] border-b border-zinc-200 bg-white dark:border-white/10 dark:bg-zinc-950"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#fafafa_0%,#ffffff_42%,#f4f4f5_100%)] dark:bg-[linear-gradient(180deg,#09090b_0%,#000000_48%,#09090b_100%)]"
+          />
+          <div
+            aria-hidden
+            className="templio-grid-texture absolute inset-0 -z-10 opacity-70 dark:opacity-45"
+          />
+          <div
+            aria-hidden
+            className="templio-grain-texture absolute inset-0 -z-10 opacity-[0.16] mix-blend-multiply dark:opacity-[0.22] dark:mix-blend-screen"
+          />
+          <Container size="lg" className="py-18 sm:py-24 lg:py-28">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="grid gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(20rem,0.92fr)] lg:items-start lg:gap-16"
+            >
+              <div className="min-w-0">
+                <SectionKicker>{t("manifesto.kicker")}</SectionKicker>
+                <h2 className="mt-6 max-w-[12.5ch] text-4xl leading-[1.02] tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl dark:text-white">
+                  <EmphasisText
+                    text={t("manifesto.heading")}
+                    highlight={t("manifesto.headingHighlight")}
+                  />
+                </h2>
+              </div>
+
+              <div className="relative min-w-0 lg:pl-10">
+                <div
+                  aria-hidden
+                  className="absolute bottom-1 top-1 left-0 hidden w-px bg-zinc-200 lg:block dark:bg-white/10"
+                />
+                <div className="space-y-8">
+                  <p className="text-xl leading-8 text-zinc-700 sm:text-2xl sm:leading-9 dark:text-zinc-200">
+                    {t("manifesto.body1")}
+                  </p>
+                  <p className="border-t border-zinc-200 pt-6 text-base leading-7 text-zinc-600 sm:text-lg sm:leading-8 dark:border-white/10 dark:text-zinc-300">
+                    {t("manifesto.body2")}
+                  </p>
+                  <p className="border-t border-zinc-200 pt-5 text-sm leading-6 text-zinc-500 dark:border-white/10 dark:text-zinc-400">
+                    <span className="italic">{t("manifesto.finePrint")}</span>
+                  </p>
+                </div>
+              </div>
             </motion.div>
           </Container>
-          <div className="mt-6 min-h-0 w-full min-w-0 sm:mt-8 md:mt-10">
+        </section>
+
+        <section
+          id="work"
+          className="scroll-mt-[calc(var(--templio-nav-height,4.5rem)+1.5rem)] border-b border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-black"
+        >
+          <Container size="lg" className="py-20 md:py-28 lg:py-32">
             <motion.div
-              className="mx-auto mb-3 flex w-full max-w-[1440px] items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.55 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="mx-auto max-w-3xl text-center"
             >
-              <h2 className="min-w-0 flex-1 text-base font-semibold text-white sm:text-lg">
-                {t("hero.stripTitle")}
+              <div className="flex justify-center">
+                <SectionKicker>{t("showcase.kicker")}</SectionKicker>
+              </div>
+              <h2 className="mt-5 text-4xl leading-[1.05] tracking-tight text-zinc-950 sm:text-5xl dark:text-white">
+                <EmphasisText
+                  text={t("showcase.heading")}
+                  highlight={t("showcase.headingHighlight")}
+                />
               </h2>
-              <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-                <button
-                  type="button"
-                  onClick={() => scrollShowcase(-1)}
-                  disabled={!canScrollLeft}
-                  aria-label={t("hero.scrollPrevious")}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 text-white transition-[background-color,opacity,box-shadow] hover:bg-white/10 hover:shadow-[inset_0_0_0_1px_#0696d7] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#0696d7] disabled:pointer-events-none disabled:opacity-35 sm:h-10 sm:w-10"
-                >
-                  <RailChevronLeft className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => scrollShowcase(1)}
-                  disabled={!canScrollRight}
-                  aria-label={t("hero.scrollNext")}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/20 text-white transition-[background-color,opacity,box-shadow] hover:bg-white/10 hover:shadow-[inset_0_0_0_1px_#0696d7] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#0696d7] disabled:pointer-events-none disabled:opacity-35 sm:h-10 sm:w-10"
-                >
-                  <RailChevronRight className="h-4 w-4" />
-                </button>
-              </div>
+              <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg dark:text-zinc-400">
+                {t("showcase.subheading")}
+              </p>
             </motion.div>
-            <div className="relative w-full min-w-0">
-              <div
-                ref={showcaseRailRef}
-                className={`flex w-full min-w-0 gap-8 overflow-x-auto overflow-y-visible py-7 [scrollbar-width:none] sm:gap-10 [&::-webkit-scrollbar]:hidden ${RAIL_INSET}`}
-              >
-                {SHOWCASE_SITES.map((site, index) => (
-                  <ShowcasePreviewCard
-                    key={site.href}
-                    site={site}
-                    name={tShowcaseSites(`${site.id}.name`)}
-                    category={tShowcaseSites(`${site.id}.category`)}
-                    compact
-                    priority={index < 2}
-                  />
-                ))}
-              </div>
-              {canScrollLeft && (
-                <div
-                  className="pointer-events-none absolute inset-y-0 left-0 z-20 w-16 bg-[linear-gradient(90deg,#000_0%,rgba(0,0,0,0.9)_32%,rgba(0,0,0,0.4)_70%,transparent_100%)] sm:w-24 md:w-32"
-                  aria-hidden
+
+            <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {SHOWCASE_SITES.map((site, index) => (
+                <ShowcaseCard
+                  key={site.href}
+                  site={site}
+                  name={tShowcaseSites(`${site.id}.name`)}
+                  category={tShowcaseSites(`${site.id}.category`)}
+                  description={tShowcaseSites(`${site.id}.description`)}
+                  index={index}
                 />
-              )}
-              {canScrollRight && (
-                <div
-                  className="pointer-events-none absolute inset-y-0 right-0 z-20 w-16 bg-[linear-gradient(270deg,#000_0%,rgba(0,0,0,0.9)_32%,rgba(0,0,0,0.4)_70%,transparent_100%)] sm:w-24 md:w-32"
-                  aria-hidden
-                />
-              )}
+              ))}
             </div>
-          </div>
-        </div>
-      </section>
 
-      <section
-        id="manifesto"
-        className="relative z-10 scroll-mt-32 bg-zinc-50 dark:bg-black"
-      >
-        <Container size="md" className="py-24 md:py-32 lg:py-40">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
-            className="space-y-8 text-left"
-          >
-            <div className="flex items-center gap-3">
-              <span
-                aria-hidden
-                className="h-px w-8 bg-sky-500/35 sm:w-10 dark:bg-sky-200/50"
-              />
-              <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-sky-700/90 sm:text-xs dark:text-sky-200/80">
-                {t("manifesto.kickerLine")}
-              </p>
-            </div>
-            <h2 className="text-3xl leading-[1.15] text-zinc-950 sm:text-4xl md:text-5xl lg:text-6xl dark:text-white">
-              <EmphasisText
-                text={t("manifesto.heading")}
-                highlight={t("manifesto.headingHighlight")}
-              />
-            </h2>
-            <div className="space-y-6 text-base leading-relaxed text-zinc-600 sm:text-lg md:text-xl dark:text-zinc-300">
-              <p>{t("manifesto.body1")}</p>
-              <p>{t("manifesto.body2")}</p>
-            </div>
-            <p className="flex items-start gap-2 text-sm leading-relaxed text-zinc-500">
-              <span aria-hidden className="mt-[0.15em] shrink-0">
-                &mdash;
-              </span>
-              <span className="italic">{t("manifesto.finePrint")}</span>
-            </p>
-          </motion.div>
-        </Container>
-      </section>
-
-      <section
-        id="work"
-        className="relative z-10 scroll-mt-32 bg-zinc-50 dark:bg-black"
-      >
-        <Container size="lg" className="space-y-10 py-16 md:py-24 lg:py-28">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="space-y-4 text-center"
-          >
-            <div className="flex items-center justify-center gap-3">
-              <span
-                aria-hidden
-                className="h-px w-8 bg-sky-500/35 sm:w-10 dark:bg-sky-200/40"
-              />
-              <p className="text-[0.68rem] font-medium uppercase tracking-[0.28em] text-sky-700/90 sm:text-xs dark:text-sky-200/80">
-                {t("showcase.kickerLine")}
-              </p>
-              <span
-                aria-hidden
-                className="h-px w-8 bg-sky-500/35 sm:w-10 dark:bg-sky-200/40"
-              />
-            </div>
-            <h2 className="text-3xl leading-[1.15] text-zinc-950 sm:text-4xl md:text-5xl dark:text-white">
-              <EmphasisText
-                text={t("showcase.heading")}
-                highlight={t("showcase.headingHighlight")}
-              />
-            </h2>
-            <p className="mx-auto max-w-2xl text-sm leading-relaxed text-zinc-500 sm:text-base md:text-lg dark:text-zinc-400">
-              {t("showcase.subheading")}
-            </p>
-          </motion.div>
-
-          <div className="grid gap-4 text-left sm:gap-5 md:grid-cols-2">
-            {SHOWCASE_SITES.map((site, index) => (
-              <motion.a
-                key={site.href}
-                href={site.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-2xl border border-zinc-200/90 bg-white/80 backdrop-blur-sm transition-colors hover:border-zinc-300 hover:bg-white dark:border-white/10 dark:bg-zinc-900/50 dark:hover:border-white/25 dark:hover:bg-zinc-900/70"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -4 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: index * 0.08 }}
-              >
-                <div className="relative aspect-[1.75] overflow-hidden border-b border-zinc-200/80 dark:border-white/10">
-                  <Image
-                    src={site.preview}
-                    alt={`${tShowcaseSites(`${site.id}.name`)} website preview`}
-                    fill
-                    sizes="(min-width: 768px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-zinc-900/50 via-transparent to-zinc-900/5 dark:from-black/70 dark:via-transparent dark:to-black/10" />
-                </div>
-                <div className="absolute inset-0 bg-linear-to-br from-sky-500/8 via-transparent to-zinc-500/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 dark:from-sky-400/10 dark:to-white/5" />
-                <div className="relative flex h-full flex-col p-6">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-xs font-medium uppercase tracking-[0.28em] text-sky-700/90 dark:text-sky-200/80">
-                      {t("showcase.builtWith", {
-                        n: String(index + 1).padStart(2, "0"),
-                      })}
-                    </p>
-                    <span
-                      aria-hidden
-                      className="h-px flex-1 bg-zinc-200/90 dark:bg-white/10"
-                    />
-                  </div>
-                  <h3 className="mt-4 text-2xl font-semibold text-zinc-950 dark:text-white">
-                    {tShowcaseSites(`${site.id}.name`)}
-                  </h3>
-                  <p className="mt-2 text-xs uppercase tracking-[0.28em] text-zinc-500">
-                    {tShowcaseSites(`${site.id}.category`)}
-                  </p>
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    {tShowcaseSites(`${site.id}.description`)}
-                  </p>
-                  <div className="mt-6 flex items-center justify-between gap-4 text-sm font-medium">
-                    <span className="flex items-center gap-2 text-zinc-900 dark:text-white">
-                      <span className="relative flex h-1.5 w-1.5">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/60" />
-                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.7)]" />
-                      </span>
-                      <span>{site.urlLabel}</span>
-                    </span>
-                    <span className="flex items-center gap-1.5 text-zinc-500 transition-colors group-hover:text-zinc-900 dark:group-hover:text-white">
-                      {t("showcase.visitLive")}
-                      <ArrowRightIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                    </span>
-                  </div>
-                </div>
-              </motion.a>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center gap-3">
-            <span
-              aria-hidden
-              className="h-px w-8 bg-zinc-300 sm:w-10 dark:bg-zinc-600/50"
-            />
-            <p className="text-center text-[0.68rem] uppercase tracking-[0.28em] text-zinc-500 sm:text-sm">
+            <p className="mx-auto mt-10 max-w-xl text-center text-xs font-semibold uppercase tracking-[0.28em] text-zinc-500 dark:text-zinc-400">
               {t("showcase.note")}
             </p>
-            <span
-              aria-hidden
-              className="h-px w-8 bg-zinc-300 sm:w-10 dark:bg-zinc-600/50"
-            />
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
 
-      <section
-        id="pitch"
-        className="relative z-10 scroll-mt-32 bg-zinc-50 dark:bg-black"
-      >
-        <Container
-          size="lg"
-          className="grid gap-10 py-20 md:grid-cols-[minmax(0,0.8fr)_minmax(340px,1fr)] md:items-start md:py-28 lg:py-32"
+        <section
+          id="pitch"
+          className="scroll-mt-[calc(var(--templio-nav-height,4.5rem)+1.5rem)] bg-white dark:bg-zinc-950"
         >
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="max-w-xl"
+          <Container
+            size="lg"
+            className="grid gap-10 py-20 md:grid-cols-[minmax(0,0.86fr)_minmax(0,1fr)] md:items-start md:py-28 lg:py-32"
           >
-            <div className="mb-5 flex items-center gap-3">
-              <span
-                aria-hidden
-                className="h-px w-8 bg-lime-500/50 sm:w-10 dark:bg-lime-300/60"
-              />
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-lime-700 sm:text-xs dark:text-lime-300">
-                {t("pitchSection.kicker")}
-              </p>
-            </div>
-            <h2 className="text-4xl font-semibold leading-[1.05] tracking-tight text-zinc-950 sm:text-5xl md:text-6xl dark:text-white">
-              {t("pitchSection.heading")}
-            </h2>
-            <p className="mt-5 text-base leading-7 text-zinc-500 sm:text-lg dark:text-zinc-400">
-              {t("pitchSection.bodyBeforeLink")}
-              <a
-                href="https://www.ayush.im"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-zinc-800 underline decoration-zinc-300 underline-offset-4 transition-colors hover:text-lime-600 dark:text-white dark:decoration-white/30 dark:hover:text-lime-200"
-              >
-                ayush.im
-              </a>
-              {t("pitchSection.bodyAfterLink")}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative"
-          >
-            <form
-              className="relative rounded-lg border border-zinc-200/90 bg-white/90 p-3 shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-2xl sm:p-4 dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-[0_24px_80px_rgba(0,0,0,0.5)]"
-              onSubmit={step === "idea" ? handleNext : handleSubmit}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6 }}
+              className="min-w-0 max-w-xl"
             >
-              <div className="space-y-3">
-                <motion.div
-                  layout
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="relative overflow-hidden rounded-md border border-zinc-200/90 bg-zinc-50/90 shadow-lg shadow-zinc-400/10 backdrop-blur-md dark:border-white/10 dark:bg-black/45 dark:shadow-black/25"
+              <SectionKicker>{t("pitchSection.kicker")}</SectionKicker>
+              <h2 className="mt-5 text-4xl font-semibold leading-[1.03] tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl dark:text-white">
+                {t("pitchSection.heading")}
+              </h2>
+              <p className="mt-6 text-base leading-7 text-zinc-600 sm:text-lg dark:text-zinc-400">
+                {t("pitchSection.bodyBeforeLink")}{" "}
+                <a
+                  href="https://www.ayush.im"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-zinc-950 underline decoration-zinc-300 underline-offset-4 transition hover:text-lime-700 dark:text-white dark:decoration-white/30 dark:hover:text-lime-200"
                 >
-                  <AnimatePresence mode="wait" initial={false}>
-                    {isLoading ? (
-                      <motion.div
-                        key="loading"
-                        className="flex min-h-16 items-center justify-center p-5"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                      >
-                        <motion.div
-                          className="h-5 w-5 rounded-full border-2 border-zinc-400 border-t-transparent dark:border-white dark:border-t-transparent"
-                          animate={{ rotate: 360 }}
-                          transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            ease: "linear",
-                          }}
-                        />
-                      </motion.div>
-                    ) : isSubmitted ? (
-                      <motion.div
-                        key="submitted"
-                        className="flex min-h-16 items-center gap-2 p-4 text-left"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="flex-1 text-sm text-zinc-600 sm:text-base dark:text-zinc-300">
-                          {submittedEmail}
-                        </div>
-                      </motion.div>
-                    ) : step === "idea" ? (
-                      <motion.div
-                        key="idea"
-                        className="flex items-end gap-2 p-2 sm:p-2.5"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <textarea
-                          ref={ideaInputRef}
-                          placeholder={tForm("ideaPlaceholder")}
-                          value={idea}
-                          onChange={(e) => setIdea(e.target.value)}
-                          onKeyDown={handleIdeaKeyDown}
-                          rows={1}
-                          suppressHydrationWarning
-                          className="field-sizing-content max-h-60 min-h-11 flex-1 resize-none self-center bg-transparent px-3 py-2.5 text-left text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none sm:text-base dark:text-white dark:placeholder:text-zinc-500"
-                        />
-                        <button
-                          type="submit"
-                          disabled={!idea.trim()}
-                          aria-label={tForm("nextLabel")}
-                          className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-zinc-900 transition-all hover:bg-lime-200 disabled:cursor-not-allowed disabled:bg-white/30 disabled:text-zinc-500"
-                        >
-                          <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                        </button>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="email"
-                        className="flex items-center gap-2 p-2 sm:p-2.5"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <input
-                          ref={emailInputRef}
-                          type="email"
-                          placeholder={tForm("emailPlaceholder")}
-                          className="min-h-11 flex-1 bg-transparent px-3 py-2.5 text-left text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none sm:text-base dark:text-white dark:placeholder:text-zinc-500"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          suppressHydrationWarning
-                        />
-                        <button
-                          type="submit"
-                          aria-label={tForm("submitLabel")}
-                          className="group flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-zinc-900 transition-all hover:bg-lime-200"
-                        >
-                          <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                        </button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-                {(formMessage || step === "email") && (
-                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-1 text-center text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
-                    {formMessage && <span>{formMessage}</span>}
-                    {step === "email" && !isLoading && !isSubmitted && (
-                      <button
-                        type="button"
-                        onClick={handleEditIdea}
-                        className="text-zinc-500 underline-offset-4 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-400 dark:hover:text-white"
-                      >
-                        {tForm("editIdeaLabel")}
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            </form>
-          </motion.div>
-        </Container>
-      </section>
+                  ayush.im
+                </a>
+                {t("pitchSection.bodyAfterLink")}
+              </p>
+            </motion.div>
 
-      <Footer />
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="relative min-w-0"
+            >
+              <form
+                className="relative rounded-lg border border-zinc-200 bg-zinc-50 p-3 shadow-[0_24px_80px_rgba(15,23,42,0.08)] sm:p-4 dark:border-white/10 dark:bg-black dark:shadow-[0_24px_80px_rgba(0,0,0,0.5)]"
+                onSubmit={step === "idea" ? handleNext : handleSubmit}
+              >
+                <div className="space-y-3">
+                  <motion.div
+                    layout
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    className="relative overflow-hidden rounded-md border border-zinc-200 bg-white shadow-sm dark:border-white/10 dark:bg-zinc-950"
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {isLoading ? (
+                        <motion.div
+                          key="loading"
+                          className="flex min-h-16 items-center justify-center p-5"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.25 }}
+                        >
+                          <motion.div
+                            className="h-5 w-5 rounded-full border-2 border-zinc-400 border-t-transparent dark:border-white dark:border-t-transparent"
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 1,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
+                          />
+                        </motion.div>
+                      ) : isSubmitted ? (
+                        <motion.div
+                          key="submitted"
+                          className="flex min-h-16 items-center gap-2 p-4 text-left"
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="flex-1 text-sm text-zinc-600 sm:text-base dark:text-zinc-300">
+                            {submittedEmail}
+                          </div>
+                        </motion.div>
+                      ) : step === "idea" ? (
+                        <motion.div
+                          key="idea"
+                          className="flex items-end gap-2 p-2 sm:p-2.5"
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <textarea
+                            ref={ideaInputRef}
+                            placeholder={tForm("ideaPlaceholder")}
+                            value={idea}
+                            onChange={(e) => setIdea(e.target.value)}
+                            onKeyDown={handleIdeaKeyDown}
+                            rows={1}
+                            suppressHydrationWarning
+                            className="field-sizing-content max-h-60 min-h-11 flex-1 resize-none self-center bg-transparent px-3 py-2.5 text-left text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none sm:text-base dark:text-white dark:placeholder:text-zinc-500"
+                          />
+                          <button
+                            type="submit"
+                            disabled={!idea.trim()}
+                            aria-label={tForm("nextLabel")}
+                            className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-zinc-950 text-white transition hover:bg-lime-600 disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-400 dark:bg-white dark:text-zinc-950 dark:hover:bg-lime-200 dark:disabled:bg-white/10 dark:disabled:text-zinc-600"
+                          >
+                            <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                          </button>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="email"
+                          className="flex items-center gap-2 p-2 sm:p-2.5"
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -6 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <input
+                            ref={emailInputRef}
+                            type="email"
+                            placeholder={tForm("emailPlaceholder")}
+                            className="min-h-11 flex-1 bg-transparent px-3 py-2.5 text-left text-sm leading-6 text-zinc-900 placeholder:text-zinc-400 focus:outline-none sm:text-base dark:text-white dark:placeholder:text-zinc-500"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            suppressHydrationWarning
+                          />
+                          <button
+                            type="submit"
+                            aria-label={tForm("submitLabel")}
+                            className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-zinc-950 text-white transition hover:bg-lime-600 dark:bg-white dark:text-zinc-950 dark:hover:bg-lime-200"
+                          >
+                            <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                  {(formMessage || step === "email") && (
+                    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-1 text-center text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+                      {formMessage && <span>{formMessage}</span>}
+                      {step === "email" && !isLoading && !isSubmitted && (
+                        <button
+                          type="button"
+                          onClick={handleEditIdea}
+                          className="text-zinc-600 underline-offset-4 transition-colors hover:text-zinc-950 hover:underline dark:text-zinc-400 dark:hover:text-white"
+                        >
+                          {tForm("editIdeaLabel")}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </form>
+            </motion.div>
+          </Container>
+        </section>
+      </main>
+
+      <div className="border-t border-zinc-200 bg-white dark:border-white/10 dark:bg-zinc-950">
+        <Footer />
+      </div>
     </div>
   );
 }
