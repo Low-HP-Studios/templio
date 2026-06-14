@@ -6,7 +6,6 @@ export interface ShowcaseSite {
   urlLabel: string;
   template: ShowcaseTemplate;
   preview: string;
-  fullPagePreview: string;
   accent: string;
   accentRgb: string;
 }
@@ -20,7 +19,6 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     urlLabel: "ayush.im",
     template: "founder",
     preview: "/previews/ayush.im.png",
-    fullPagePreview: "/full-page-previews/ayush.im.png",
     accent: "#a78bfa",
     accentRgb: "167,139,250",
   },
@@ -30,7 +28,6 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     urlLabel: "bikram.templio.app",
     template: "portfolio",
     preview: "/previews/bikram.png",
-    fullPagePreview: "/full-page-previews/bikram.png",
     accent: "#d6d3c1",
     accentRgb: "214,211,193",
   },
@@ -40,7 +37,6 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     urlLabel: "arnold.templio.app",
     template: "portfolio",
     preview: "/previews/arnold.png",
-    fullPagePreview: "/full-page-previews/Arnold.png",
     accent: "#f59e0b",
     accentRgb: "245,158,11",
   },
@@ -50,7 +46,6 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     urlLabel: "lowhp.studio",
     template: "studio",
     preview: "/previews/lowhp.png",
-    fullPagePreview: "/full-page-previews/Low-hp-studio.png",
     accent: "#22d3ee",
     accentRgb: "34,211,238",
   },
@@ -60,7 +55,6 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     urlLabel: "lunaticladz.com",
     template: "community",
     preview: "/previews/lunaticladz.png",
-    fullPagePreview: "/full-page-previews/Lunatic-ladz.png",
     accent: "#f97316",
     accentRgb: "249,115,22",
   },
@@ -70,7 +64,6 @@ export const SHOWCASE_SITES: ShowcaseSite[] = [
     urlLabel: "masala-indian-restaurant.vercel.app",
     template: "studio",
     preview: "/previews/masala-indian-restaurant.png",
-    fullPagePreview: "/full-page-previews/masala-indian-restaurant.png",
     accent: "#d97706",
     accentRgb: "217,119,6",
   },
