@@ -8,6 +8,8 @@
     "manifesto": "Manifesto",
     "work": "Preview",
     "pitch": "Pitch",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "selectLanguage": "Select language",
     "selectTheme": "Select theme",
     "themeLight": "Light",
@@ -34,12 +36,9 @@
     "h1": "Custom websites that feel hand-built",
     "sub": "Pitch a portfolio, fan site, studio page, or strange little corner of the internet. If it has a pulse, we can build around it.",
     "cta": "Pitch a site",
-    "stripTitle": "Websites built with Templio",
-    "scrollPrevious": "Scroll back through sites",
-    "scrollNext": "Scroll to more sites"
+    "stripTitle": "Websites built with Templio"
   },
   "manifesto": {
-    "kickerLine": "§ 01 — The deal",
     "kicker": "The deal",
     "heading": "Most websites are the same template in a different color.",
     "headingHighlight": "template",
@@ -48,7 +47,6 @@
     "finePrint": "I take on a few of these at a time, so it might take a minute to hear back. I read every pitch."
   },
   "showcase": {
-    "kickerLine": "§ 02 — Take a closer look",
     "kicker": "Take a closer look",
     "heading": "Every one started as a pitch.",
     "headingHighlight": "pitch",

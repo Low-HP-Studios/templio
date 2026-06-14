@@ -5,6 +5,5 @@ export { Navbar } from "./Navbar";
 export { NavLink } from "./NavLink";
 export { Container } from "./Container";
 export { SeparatedLinks } from "./SeparatedLinks";
-export { VideoBackground } from "./VideoBackground";
 export { ShowcaseMockup } from "./ShowcaseMockup";
 export { ThemeToaster } from "./ThemeToaster";

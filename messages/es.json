@@ -8,6 +8,8 @@
     "manifesto": "Manifiesto",
     "work": "Vistazo",
     "pitch": "Propuesta",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
     "selectLanguage": "Elegir idioma",
     "selectTheme": "Elegir tema",
     "themeLight": "Claro",
@@ -34,12 +36,9 @@
     "h1": "Webs a medida con sensación de hechas a mano",
     "sub": "Cuenta un portfolio, un fan site, una página de estudio o un rincón raro. Si vibra, podemos levantar algo alrededor.",
     "cta": "Lanza tu idea",
-    "stripTitle": "Webs creadas con Templio",
-    "scrollPrevious": "Ver sitios anteriores",
-    "scrollNext": "Ver más sitios"
+    "stripTitle": "Webs creadas con Templio"
   },
   "manifesto": {
-    "kickerLine": "§ 01 — El trato",
     "kicker": "El trato",
     "heading": "Casi todos los sitios son la misma plantilla con otro color.",
     "headingHighlight": "plantilla",
@@ -48,7 +47,6 @@
     "finePrint": "Acepto unas cuantas a la vez, así que puede haber tiento en responder. Leo cada idea."
   },
   "showcase": {
-    "kickerLine": "§ 02 — Míralo con calma",
     "kicker": "Míralo con calma",
     "heading": "Cada una empezó siendo un pitch.",
     "headingHighlight": "pitch",

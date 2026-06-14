@@ -8,6 +8,8 @@
     "manifesto": "Manifest",
     "work": "Vorschau",
     "pitch": "Pitch",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
     "selectLanguage": "Sprache wählen",
     "selectTheme": "Design wählen",
     "themeLight": "Hell",
@@ -34,12 +36,9 @@
     "h1": "Individuelle Websites, handwerklich gebaut",
     "sub": "Pitch ein Portfolio, eine Fan-Seite, Studio-Seite oder eine skurrile Ecke des Internets. Wenn es Puls hat, bauen wir darum herum.",
     "cta": "Eine Seite pitchen",
-    "stripTitle": "Websites mit Templio gebaut",
-    "scrollPrevious": "Vorherige Seiten anzeigen",
-    "scrollNext": "Weitere Seiten anzeigen"
+    "stripTitle": "Websites mit Templio gebaut"
   },
   "manifesto": {
-    "kickerLine": "§ 01 — Die Absprache",
     "kicker": "Die Absprache",
     "heading": "Die meisten Websites sind dieselbe Vorlage in einer anderen Farbe.",
     "headingHighlight": "Vorlage",
@@ -48,7 +47,6 @@
     "finePrint": "Ich nehme nur ein paar davon an, es kann also etwas dauern bis etwas von mir kommt. Ich lese jede Anfrage."
   },
   "showcase": {
-    "kickerLine": "§ 02 — Genauer hinsehen",
     "kicker": "Genauer hinsehen",
     "heading": "Jede hat als Pitch angefangen.",
     "headingHighlight": "Pitch",

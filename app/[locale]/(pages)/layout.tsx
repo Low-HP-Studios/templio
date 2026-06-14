@@ -15,9 +15,7 @@ export default async function PagesLayout({ children, params }: Props) {
   }
   return (
     <div className="min-h-screen w-full">
-      <div className="border-b border-zinc-200/90 bg-white/80 backdrop-blur-sm dark:border-white/10 dark:bg-black/50">
-        <Navbar />
-      </div>
+      <Navbar />
 
       {children}
 

@@ -12,6 +12,11 @@ const sectionNavIds = ["home", "manifesto", "work", "pitch"] as const;
 const themeChoices = ["light", "dark", "system"] as const;
 type ThemeChoice = (typeof themeChoices)[number];
 
+const isSectionNavId = (
+  value: string
+): value is (typeof sectionNavIds)[number] =>
+  (sectionNavIds as readonly string[]).includes(value);
+
 function GlobeIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
     <svg
@@ -65,7 +70,39 @@ function ChevronDownIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
+function MenuIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M3.5 6.5h13M3.5 13.5h13" />
+    </svg>
+  );
+}
+
+function XIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M5 5l10 10M15 5 5 15" />
+    </svg>
+  );
+}
+
+export function Navbar() {
   const t = useTranslations("nav");
   const tLocale = useTranslations("localeLabel");
   const tLocaleName = useTranslations("localeName");
@@ -76,61 +113,116 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
   const [activeSection, setActiveSection] = useState("home");
   const [langOpen, setLangOpen] = useState(false);
   const [themeOpen, setThemeOpen] = useState(false);
-  const headerControlsRef = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
   const listboxId = "locale-listbox";
   const themeListboxId = "theme-listbox";
+  const isLanding = pathname === "/";
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const root = document.documentElement;
+    const syncNavHeight = () => {
+      root.style.setProperty("--templio-nav-height", `${nav.offsetHeight}px`);
+    };
+
+    syncNavHeight();
+    const resizeObserver = new ResizeObserver(syncNavHeight);
+    resizeObserver.observe(nav);
+    window.addEventListener("resize", syncNavHeight);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", syncNavHeight);
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!isLanding) return;
+
+    const setFromHash = () => {
+      const id = window.location.hash.replace("#", "");
+      if (!isSectionNavId(id)) return false;
+      setActiveSection(id);
+      return true;
+    };
 
     const setFromScroll = () => {
       const navIds = [...sectionNavIds];
       const rem =
         parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-      const line = 6.75 * rem;
+      const navHeight =
+        parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--templio-nav-height"
+          )
+        ) || 4.5 * rem;
+      const line = navHeight + 2 * rem;
       let current = navIds[0] ?? "home";
+
       for (const id of navIds) {
         const el = document.getElementById(id);
         if (!el) continue;
-        const top = el.getBoundingClientRect().top;
-        if (top <= line) {
-          current = id;
-        }
+        if (el.getBoundingClientRect().top <= line) current = id;
       }
+
       setActiveSection(current);
     };
 
-    setFromScroll();
+    let frameId = 0;
+    const syncAfterAnchorScroll = () => {
+      window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(() => {
+        if (!setFromHash()) setFromScroll();
+      });
+    };
+    const timeoutId = window.setTimeout(() => {
+      if (!setFromHash()) setFromScroll();
+    }, 120);
+
+    if (!setFromHash()) setFromScroll();
+    syncAfterAnchorScroll();
     window.addEventListener("scroll", setFromScroll, { passive: true });
     window.addEventListener("resize", setFromScroll);
+    window.addEventListener("hashchange", syncAfterAnchorScroll);
 
     return () => {
+      window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(frameId);
       window.removeEventListener("scroll", setFromScroll);
       window.removeEventListener("resize", setFromScroll);
+      window.removeEventListener("hashchange", syncAfterAnchorScroll);
     };
-  }, [pathname]);
+  }, [isLanding]);
 
   useEffect(() => {
-    if (!langOpen && !themeOpen) return;
+    if (!langOpen && !themeOpen && !menuOpen) return;
+
     const close = (e: MouseEvent) => {
-      if (!headerControlsRef.current?.contains(e.target as Node)) {
+      if (!navRef.current?.contains(e.target as Node)) {
         setLangOpen(false);
         setThemeOpen(false);
+        setMenuOpen(false);
       }
     };
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setLangOpen(false);
         setThemeOpen(false);
+        setMenuOpen(false);
       }
     };
+
     document.addEventListener("mousedown", close);
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("mousedown", close);
       document.removeEventListener("keydown", onKey);
     };
-  }, [langOpen, themeOpen]);
+  }, [langOpen, themeOpen, menuOpen]);
 
   const labelForThemeChoice = (choice: ThemeChoice) => {
     if (choice === "light") return t("themeLight");
@@ -142,12 +234,11 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
     (theme ?? "system") as ThemeChoice
   );
 
-  const mainBarInteractive =
-    "cursor-pointer rounded-[5px] text-white transition-[background-color,box-shadow,transform] duration-200 hover:bg-lime-300/10 hover:shadow-[inset_0_0_0_2px_#bef264] active:translate-y-px active:bg-lime-300/15 active:shadow-[inset_0_0_0_2px_#bef264] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#bef264]";
+  const currentLocalePrefix =
+    locale === routing.defaultLocale ? "" : `/${locale}`;
 
-  const subBarInteractive =
-    "cursor-pointer rounded-[5px] text-zinc-900 transition-[background-color,box-shadow,transform] duration-200 hover:bg-lime-300/10 hover:shadow-[inset_0_0_0_2px_#bef264] active:translate-y-px active:bg-lime-300/15 active:shadow-[inset_0_0_0_2px_#bef264] focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#bef264] dark:text-white";
-  const linkClasses = `${subBarInteractive} relative px-3 py-2`;
+  const hrefFor = (id: (typeof sectionNavIds)[number]) =>
+    isLanding ? `#${id}` : `${currentLocalePrefix}/#${id}`;
 
   const labelFor = (id: (typeof sectionNavIds)[number]) => {
     switch (id) {
@@ -164,212 +255,234 @@ export function Navbar({ includeSpacer = true }: { includeSpacer?: boolean }) {
     }
   };
 
+  const navButtonClasses =
+    "inline-flex h-10 items-center justify-center rounded-md border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:border-white/20 dark:hover:bg-zinc-900 dark:hover:text-white";
+
+  const renderNavLinks = (mobile = false) =>
+    sectionNavIds.map((id) => {
+      const isActive = isLanding && activeSection === id;
+      return (
+        <a
+          key={id}
+          href={hrefFor(id)}
+          aria-current={isActive ? "page" : undefined}
+          className={`relative rounded-md text-sm font-medium transition ${
+            mobile
+              ? "flex items-center justify-between px-3 py-3 text-zinc-900 hover:bg-zinc-100 dark:text-white dark:hover:bg-white/5"
+              : "px-3 py-2 text-zinc-600 hover:text-zinc-950 dark:text-zinc-300 dark:hover:text-white"
+          } ${isActive ? "text-zinc-950 dark:text-white" : ""}`}
+          onClick={() => {
+            setActiveSection(id);
+            setMenuOpen(false);
+          }}
+        >
+          {labelFor(id)}
+          <span
+            aria-hidden
+            className={`absolute ${
+              mobile ? "inset-y-3 right-3 w-px" : "inset-x-3 -bottom-0.5 h-px"
+            } bg-lime-400 transition-opacity ${
+              isActive ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        </a>
+      );
+    });
+
   return (
-    <>
-      <nav className="fixed inset-x-0 top-0 z-50 w-full">
-        <div className="border-b border-white/10 bg-black text-white">
-          <Container
-            size="xl"
-            className="flex h-16 items-center justify-between gap-4"
-          >
-            <Link
-              href="/"
-              className={`${mainBarInteractive} inline-flex h-12 items-center gap-2 px-2 sm:gap-3`}
-              onClick={() => setActiveSection("home")}
+    <nav
+      ref={navRef}
+      className="sticky inset-x-0 top-0 z-50 border-b border-zinc-200/80 bg-white/90 text-zinc-950 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-950/90 dark:text-white"
+    >
+      <Container
+        size="xl"
+        className="flex min-h-[4.5rem] items-center justify-between gap-3 py-2"
+      >
+        <Link
+          href="/"
+          className="inline-flex min-w-0 items-center gap-2 rounded-md px-1 py-1 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lime-300"
+          onClick={() => {
+            setActiveSection("home");
+            setMenuOpen(false);
+          }}
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-zinc-950 dark:bg-white">
+            <Image
+              src="/logo/logo.svg"
+              alt=""
+              width={40}
+              height={40}
+              priority
+              className="h-5 w-auto dark:invert"
+            />
+          </span>
+          <span className="font-display text-2xl leading-none sm:text-[1.7rem]">
+            Templio
+          </span>
+        </Link>
+
+        <div className="hidden items-center gap-1 md:flex">
+          {renderNavLinks()}
+        </div>
+
+        <div className="flex min-w-0 items-center justify-end gap-1.5 sm:gap-2">
+          <div className="relative">
+            <button
+              type="button"
+              id="locale-trigger"
+              aria-label={`${t("selectLanguage")}: ${tLocaleName(locale)} · ${tLocale(locale)}`}
+              aria-haspopup="listbox"
+              aria-expanded={langOpen}
+              aria-controls={listboxId}
+              className={`${navButtonClasses} max-w-[6.25rem] gap-1.5 px-2.5 sm:max-w-44 sm:px-3`}
+              onClick={() => {
+                setLangOpen((o) => !o);
+                setThemeOpen(false);
+              }}
             >
-              <Image
-                src="/logo/logo.svg"
-                alt=""
-                width={40}
-                height={40}
-                priority
-                className="h-5 w-auto sm:h-6"
-              />
-              <span className="font-display text-2xl leading-none text-white sm:text-[1.7rem]">
-                Templio
+              <GlobeIcon className="h-4 w-4 shrink-0" />
+              <span className="truncate" suppressHydrationWarning>
+                <span className="sm:hidden">{tLocale(locale)}</span>
+                <span className="hidden sm:inline">
+                  {tLocaleName(locale)}
+                  <span className="text-zinc-400 dark:text-zinc-500"> · </span>
+                  {tLocale(locale)}
+                </span>
               </span>
-            </Link>
-            <div
-              ref={headerControlsRef}
-              className="flex items-center gap-2 text-white sm:gap-3"
+              <ChevronDownIcon
+                className={`h-3.5 w-3.5 shrink-0 transition-transform ${
+                  langOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {langOpen && (
+              <ul
+                id={listboxId}
+                role="listbox"
+                aria-labelledby="locale-trigger"
+                className="absolute right-0 top-full z-60 mt-2 min-w-52 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-md border border-zinc-200 bg-white py-1 text-sm text-zinc-900 shadow-[0_18px_50px_rgba(15,23,42,0.14)] dark:border-white/10 dark:bg-zinc-950 dark:text-white dark:shadow-[0_18px_50px_rgba(0,0,0,0.5)]"
+              >
+                {routing.locales.map((code) => {
+                  const selected = code === locale;
+                  return (
+                    <li key={code} role="none">
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={selected}
+                        className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm transition-colors ${
+                          selected
+                            ? "bg-lime-100 text-zinc-950 dark:bg-lime-300/15 dark:text-lime-100"
+                            : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-white/5 dark:hover:text-white"
+                        }`}
+                        onClick={() => {
+                          setLangOpen(false);
+                          if (code === locale) return;
+                          router.replace(pathname, { locale: code });
+                        }}
+                      >
+                        <span className="min-w-0 flex-1 truncate font-medium">
+                          {tLocaleName(code)}
+                          <span className="text-zinc-400"> · </span>
+                          <span>{tLocale(code)}</span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+
+          <div className="relative">
+            <button
+              type="button"
+              id="theme-trigger"
+              aria-label={`${t("selectTheme")}: ${currentThemeLabel}`}
+              aria-haspopup="listbox"
+              aria-expanded={themeOpen}
+              aria-controls={themeListboxId}
+              suppressHydrationWarning
+              className={`${navButtonClasses} max-w-[5.5rem] gap-1.5 px-2.5 sm:max-w-36 sm:px-3`}
+              onClick={() => {
+                setThemeOpen((o) => !o);
+                setLangOpen(false);
+              }}
             >
-              <div className="relative">
-                <button
-                  type="button"
-                  id="locale-trigger"
-                  aria-label={`${t("selectLanguage")}: ${tLocaleName(locale)} · ${tLocale(locale)}`}
-                  aria-haspopup="listbox"
-                  aria-expanded={langOpen}
-                  aria-controls={listboxId}
-                  className={`${mainBarInteractive} inline-flex h-9 min-w-0 max-w-[min(16rem,42vw)] items-center gap-1.5 px-2.5 text-left text-sm sm:h-10 sm:max-w-[20rem] sm:px-3`}
-                  onClick={() => {
-                    setLangOpen((o) => !o);
-                    setThemeOpen(false);
-                  }}
-                >
-                  <GlobeIcon className="h-4 w-4 shrink-0" />
-                  <span className="min-w-0 flex-1 truncate font-medium text-white">
-                    {tLocaleName(locale)}
-                    <span className="text-white/45"> · </span>
-                    <span className="text-white/60">{tLocale(locale)}</span>
-                  </span>
-                  <ChevronDownIcon
-                    className={`h-3.5 w-3.5 shrink-0 text-white/80 transition-transform duration-200 ${
-                      langOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {langOpen && (
-                  <ul
-                    id={listboxId}
-                    role="listbox"
-                    aria-labelledby="locale-trigger"
-                    className="absolute right-0 top-full z-60 mt-1 min-w-50 max-w-[min(18rem,calc(100vw-1.5rem))] overflow-hidden rounded-md border border-white/10 bg-zinc-950 py-1 text-sm text-white shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
-                  >
-                    {routing.locales.map((code) => {
-                      const selected = code === locale;
-                      return (
-                        <li key={code} role="none">
-                          <button
-                            type="button"
-                            role="option"
-                            aria-selected={selected}
-                            className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm transition-colors ${
-                              selected
-                                ? "bg-lime-300/15 text-lime-100"
-                                : "text-zinc-200 hover:bg-white/5 hover:text-white"
-                            }`}
-                            onClick={() => {
-                              setLangOpen(false);
-                              if (code === locale) return;
-                              router.replace(pathname, { locale: code });
-                            }}
-                          >
-                            <span className="min-w-0 flex-1 truncate font-medium">
-                              {tLocaleName(code)}
-                              <span
-                                className={
-                                  selected
-                                    ? "text-lime-200/50"
-                                    : "text-zinc-500"
-                                }
-                              >
-                                {" "}
-                                ·{" "}
-                              </span>
-                              <span
-                                className={
-                                  selected
-                                    ? "text-lime-200/80"
-                                    : "text-zinc-400"
-                                }
-                              >
-                                {tLocale(code)}
-                              </span>
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </div>
-              <span aria-hidden className="h-5 w-px bg-white/25" />
-              <div className="relative">
-                <button
-                  type="button"
-                  id="theme-trigger"
-                  aria-label={`${t("selectTheme")}: ${currentThemeLabel}`}
-                  aria-haspopup="listbox"
-                  aria-expanded={themeOpen}
-                  aria-controls={themeListboxId}
-                  suppressHydrationWarning
-                  className={`${mainBarInteractive} inline-flex h-9 min-w-0 max-w-[min(12rem,38vw)] items-center gap-1.5 px-2.5 text-left text-sm sm:h-10 sm:max-w-56 sm:px-3`}
-                  onClick={() => {
-                    setThemeOpen((o) => !o);
-                    setLangOpen(false);
-                  }}
-                >
-                  <ThemeIcon className="h-4 w-4 shrink-0" />
-                  <span
-                    className="min-w-0 flex-1 truncate font-medium text-white"
-                    suppressHydrationWarning
-                  >
-                    {currentThemeLabel}
-                  </span>
-                  <ChevronDownIcon
-                    className={`h-3.5 w-3.5 shrink-0 text-white/80 transition-transform duration-200 ${
-                      themeOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {themeOpen && (
-                  <ul
-                    id={themeListboxId}
-                    role="listbox"
-                    aria-labelledby="theme-trigger"
-                    className="absolute right-0 top-full z-60 mt-1 min-w-50 max-w-[min(16rem,calc(100vw-1.5rem))] overflow-hidden rounded-md border border-white/10 bg-zinc-950 py-1 text-sm text-white shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
-                  >
-                    {themeChoices.map((choice) => {
-                      const active = (theme ?? "system") === choice;
-                      return (
-                        <li key={choice} role="none">
-                          <button
-                            type="button"
-                            role="option"
-                            aria-selected={active}
-                            className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm font-medium transition-colors ${
-                              active
-                                ? "bg-lime-300/15 text-lime-100"
-                                : "text-zinc-200 hover:bg-white/5 hover:text-white"
-                            }`}
-                            onClick={() => {
-                              setThemeOpen(false);
-                              setTheme(choice);
-                            }}
-                          >
-                            {labelForThemeChoice(choice)}
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </Container>
-        </div>
-        <div className="border-b border-zinc-200/90 bg-zinc-50/90 dark:border-white/10 dark:bg-black">
-          <Container
-            size="xl"
-            className="flex h-11 items-center overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              <ThemeIcon className="h-4 w-4 shrink-0" />
+              <span
+                className="hidden truncate sm:inline"
+                suppressHydrationWarning
+              >
+                {currentThemeLabel}
+              </span>
+              <ChevronDownIcon
+                className={`h-3.5 w-3.5 shrink-0 transition-transform ${
+                  themeOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            {themeOpen && (
+              <ul
+                id={themeListboxId}
+                role="listbox"
+                aria-labelledby="theme-trigger"
+                className="absolute right-0 top-full z-60 mt-2 min-w-44 max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-md border border-zinc-200 bg-white py-1 text-sm text-zinc-900 shadow-[0_18px_50px_rgba(15,23,42,0.14)] dark:border-white/10 dark:bg-zinc-950 dark:text-white dark:shadow-[0_18px_50px_rgba(0,0,0,0.5)]"
+              >
+                {themeChoices.map((choice) => {
+                  const active = (theme ?? "system") === choice;
+                  return (
+                    <li key={choice} role="none">
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={active}
+                        className={`flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left text-sm font-medium transition-colors ${
+                          active
+                            ? "bg-lime-100 text-zinc-950 dark:bg-lime-300/15 dark:text-lime-100"
+                            : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-white/5 dark:hover:text-white"
+                        }`}
+                        onClick={() => {
+                          setThemeOpen(false);
+                          setTheme(choice);
+                        }}
+                      >
+                        {labelForThemeChoice(choice)}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+
+          <button
+            type="button"
+            aria-label={menuOpen ? t("closeMenu") : t("openMenu")}
+            aria-expanded={menuOpen}
+            className={`${navButtonClasses} px-2.5 md:hidden`}
+            onClick={() => {
+              setMenuOpen((o) => !o);
+              setLangOpen(false);
+              setThemeOpen(false);
+            }}
           >
-            <div className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-zinc-900 sm:gap-2 sm:text-[0.95rem] dark:text-white">
-              {sectionNavIds.map((id) => {
-                const isActive = activeSection === id;
-                return (
-                  <a
-                    key={id}
-                    href={`#${id}`}
-                    aria-current={isActive ? "page" : undefined}
-                    className={linkClasses}
-                    onClick={() => setActiveSection(id)}
-                  >
-                    {labelFor(id)}
-                    <span
-                      aria-hidden
-                      className={`absolute inset-x-3 bottom-1 h-px bg-lime-300 transition-opacity duration-200 ${
-                        isActive ? "opacity-100" : "opacity-0"
-                      }`}
-                    />
-                  </a>
-                );
-              })}
-            </div>
+            {menuOpen ? (
+              <XIcon className="h-4 w-4" />
+            ) : (
+              <MenuIcon className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+      </Container>
+
+      {menuOpen && (
+        <div className="border-t border-zinc-200/80 bg-white/95 md:hidden dark:border-white/10 dark:bg-zinc-950/95">
+          <Container size="xl" className="py-3">
+            <div className="grid gap-1">{renderNavLinks(true)}</div>
           </Container>
         </div>
-      </nav>
-      {includeSpacer && <div aria-hidden className="h-27 shrink-0" />}
-    </>
+      )}
+    </nav>
   );
 }
