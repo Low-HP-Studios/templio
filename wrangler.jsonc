@@ -15,5 +15,10 @@
   "images": {
     "binding": "IMAGES"
   },
-  "keep_names": false
+  "keep_names": false,
+  "previews": {
+    "images": {
+      "binding": "IMAGES"
+    }
+  }
 }
