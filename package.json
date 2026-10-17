@@ -19,7 +19,10 @@
     "commit": "cz",
     "convex:dev": "convex dev",
     "convex:sync": "convex dev --once",
-    "convex:deploy": "convex deploy"
+    "convex:deploy": "convex deploy",
+    "build:cloudflare": "opennextjs-cloudflare build",
+    "preview:cloudflare": "opennextjs-cloudflare preview",
+    "deploy:preview": "opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
@@ -54,11 +57,14 @@
     "lint-staged": "^17.0.5",
     "prettier": "^3.8.3",
     "tailwindcss": "^4.3.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "@opennextjs/cloudflare": "1.20.12",
+    "wrangler": "4.151.1"
   },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  }
+  },
+  "packageManager": "pnpm@12.4.1"
 }

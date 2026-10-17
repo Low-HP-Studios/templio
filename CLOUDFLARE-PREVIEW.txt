@@ -1,0 +1,17 @@
+Cloudflare hosting migration
+
+Use Node 24 and pnpm 12.4.1.
+Install: pnpm install --frozen-lockfile
+Build: pnpm run build:cloudflare
+Local Workers runtime: pnpm run preview:cloudflare
+Deploy built preview: pnpm run deploy:preview
+
+The Wrangler configuration deploys a separate migration-preview Worker without custom-domain routes. Merging this change does not move production domains. Existing Vercel production stays available for rollback. Git-triggered Cloudflare deployments and production domain attachment will be configured after review/merge.
+
+Set NEXT_PUBLIC_CONVEX_URL to the existing Convex deployment URL in the build environment (or ignored .env.local). It is bundled into browser code, so changing it requires a rebuild. Keep Convex/Resend backend deployments and secrets unchanged; do not run convex deploy for this hosting migration. A throwaway UI-only build can use https://preview.invalid, but its forms cannot submit.
+
+OpenNext warns that Node middleware support is experimental. Locale routes and language negotiation were tested successfully. keep_names=false is required for next-themes inline scripts.
+
+Validation on 17 October 2026: Next/OpenNext build and deployed Workers routes passed; generated assets served successfully. Contact/backend delivery evidence is recorded in the migration handoff. No Vercel cleanup or DNS cutover is authorized by merging this PR alone.
+
+Delivery gate: a connected preview contact submission saved successfully to the existing Convex deployment, but its notification action returned "Failed to send notification email". The current UI still displays success. Diagnose the shared Convex/Resend configuration before production cutover. No backend code or secrets were changed.
