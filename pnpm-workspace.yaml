@@ -4,9 +4,4 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
-onlyBuiltDependencies:
-  - "@parcel/watcher"
-  - "@swc/core"
-  - esbuild
-  - sharp
-  - unrs-resolver
+  workerd: true
